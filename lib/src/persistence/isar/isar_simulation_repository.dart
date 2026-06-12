@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../domain/domain.dart';
 import '../simulation_repository.dart';
+import '../simulation_state_codec.dart';
 import 'simulation_save_record.dart';
 
 class IsarSimulationRepository implements SimulationRepository {
@@ -24,20 +25,13 @@ class IsarSimulationRepository implements SimulationRepository {
       return state;
     }
 
-    try {
-      final decoded = jsonDecode(record.stateJson);
-      if (decoded is Map<String, Object?>) {
-        return SimulationState.fromJson(decoded);
-      }
-      if (decoded is Map) {
-        return SimulationState.fromJson(
-          decoded.map((key, value) => MapEntry(key.toString(), value)),
-        );
-      }
-    } on FormatException {
-      // Fall through to safe default recovery.
+    final restored = SimulationStateCodec.decode(record.stateJson);
+    if (restored != null) {
+      return restored;
     }
 
+    // Unreadable payload (corrupt JSON, non-map, or unsupported schema
+    // version): fall through to safe default recovery.
     final recovered = SimulationState.newGame();
     await saveState(recovered);
     return recovered;

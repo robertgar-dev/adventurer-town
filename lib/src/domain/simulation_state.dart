@@ -96,10 +96,31 @@ class SimulationState {
   }
 
   static const int currentSchemaVersion = 1;
+
+  /// Schema versions this build knows how to restore. A persisted payload whose
+  /// `schemaVersion` is absent or outside this set is treated as unreadable so
+  /// the persistence layer can recover a safe default state instead of loading
+  /// fields it cannot interpret.
+  static const Set<int> supportedSchemaVersions = {currentSchemaVersion};
+
   static const int fixedTickIntervalSeconds =
       EconomyConstants.tickIntervalSeconds;
   static const int defaultRecentWindowTicks =
       EconomyConstants.recentMetricsWindowTicks;
+
+  /// Returns `true` when [value] is a schema version this build supports.
+  ///
+  /// Used by the persistence layer as a load-time gate: an unsupported or
+  /// missing version triggers safe-default recovery rather than a best-effort
+  /// parse of an unknown layout.
+  static bool isSupportedSchemaVersion(Object? value) {
+    final version = value is int
+        ? value
+        : value is num
+            ? value.toInt()
+            : null;
+    return version != null && supportedSchemaVersions.contains(version);
+  }
 
   final int schemaVersion;
   final int tickIntervalSeconds;

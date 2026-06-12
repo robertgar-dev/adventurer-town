@@ -6,7 +6,11 @@ import '../simulation/simulation_engine.dart';
 import 'simulation_controller.dart';
 
 final simulationRepositoryProvider = Provider<SimulationRepository>((ref) {
-  return createFlutterFileSimulationRepository();
+  // Isar is the production persistence path for M3. The Flutter app bundles
+  // the native Isar core via isar_community_flutter_libs, so no manual core
+  // initialization is required here. FileSimulationRepository remains available
+  // as a development/test utility (see createFlutterFileSimulationRepository).
+  return IsarSimulationRepository();
 });
 
 final simulationEngineProvider = Provider<SimulationEngine>((ref) {

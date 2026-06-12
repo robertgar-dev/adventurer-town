@@ -3,6 +3,7 @@ import 'dart:io';
 
 import '../domain/domain.dart';
 import 'simulation_repository.dart';
+import 'simulation_state_codec.dart';
 
 class FileSimulationRepository implements SimulationRepository {
   FileSimulationRepository(this._fileFactory);
@@ -19,17 +20,12 @@ class FileSimulationRepository implements SimulationRepository {
     }
 
     try {
-      final decoded = jsonDecode(await file.readAsString());
-      if (decoded is Map<String, Object?>) {
-        return SimulationState.fromJson(decoded);
+      final restored = SimulationStateCodec.decode(await file.readAsString());
+      if (restored != null) {
+        return restored;
       }
-      if (decoded is Map) {
-        return SimulationState.fromJson(
-          decoded.map((key, value) => MapEntry(key.toString(), value)),
-        );
-      }
-    } on FormatException {
-      // Fall through to safe default recovery.
+      // Unreadable payload (corrupt JSON, non-map, or unsupported schema
+      // version): fall through to safe default recovery.
     } on IOException {
       // Fall through to safe default recovery.
     }
