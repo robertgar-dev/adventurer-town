@@ -182,8 +182,9 @@ void main() {
       );
       await _openDetail(tester, 'Tavern');
 
-      await _expectVisible(tester, 'Tavern served Food demand.');
-      await _expectVisible(tester, '+5 Gold, +1 Reputation');
+      await _expectVisible(
+          tester, 'The Tavern served hot meals to hungry adventurers.');
+      await _expectVisible(tester, '+5 Gold · word spread');
     });
   });
 }

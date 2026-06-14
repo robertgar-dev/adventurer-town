@@ -328,7 +328,7 @@ String _pressureSummary({
 }
 
 EventFeedItemViewModel? _eventFeedItemViewModelFor(EventFeedEntry entry) {
-  final description = _eventDescription(entry);
+  final description = eventFeedNarrative(entry);
   if (description == null) {
     return null;
   }
@@ -348,33 +348,86 @@ EventFeedItemViewModel? _eventFeedItemViewModelFor(EventFeedEntry entry) {
   );
 }
 
-String? _eventDescription(EventFeedEntry entry) {
+/// M8 Event Feed narrative resolver.
+///
+/// A small, bounded "economic-with-flavor" template library. Every line is
+/// derived from real event fields (building, demand, axis, level) — no authored
+/// story, no recurring names, no unsupported mechanics. Returns `null` for
+/// categories the feed does not surface, so the resolver is fallback-safe for
+/// incomplete or non-display events.
+String? eventFeedNarrative(EventFeedEntry entry) {
   final building = entry.buildingType;
   final demand = entry.demandType;
 
   switch (entry.eventType) {
     case EventType.demandServed:
-      if (building == null || demand == null) {
+      // Capability/pride: the town met an adventurer's need.
+      if (building == null) {
         return null;
       }
-      return '${buildingName(building)} served ${demandName(demand)} demand.';
+      return _servedNarrative[building] ??
+          '${buildingName(building)} served '
+              '${demand == null ? 'an' : demandName(demand)} adventurer.';
     case EventType.demandMissed:
-      if (building == null || demand == null) {
+      // Missed opportunity (never punishment, queue, refund, or blame): the
+      // service was not ready for the pressure placed on it.
+      if (building == null) {
         return null;
       }
-      return '${buildingName(building)} missed ${demandName(demand)} demand.';
+      return _missedNarrative[building] ??
+          'The ${buildingName(building)} could not reach everyone in time.';
     case EventType.buildingUpgraded:
-      if (building == null || entry.upgradeAxis == null) {
+      // Stewardship: Capacity reads as more service coverage; Value reads as
+      // better Gold return from demand already served.
+      final axis = entry.upgradeAxis;
+      if (building == null || axis == null) {
         return null;
       }
-      final level = entry.variables['level'];
-      final levelLabel = level == null ? '' : ' to Level $level';
-      return '${buildingName(building)} ${_upgradeAxisLabel(entry.upgradeAxis!)} upgraded$levelLabel.';
+      return _upgradeNarrative(building, demand, axis, entry.variables['level']);
     case EventType.adventurerArrived:
     case EventType.demandGenerated:
     case EventType.buildingBottleneck:
     case EventType.simulationTick:
       return null;
+  }
+}
+
+const Map<BuildingType, String> _servedNarrative = {
+  BuildingType.inn: 'The Inn welcomed weary adventurers in to rest.',
+  BuildingType.tavern: 'The Tavern served hot meals to hungry adventurers.',
+  BuildingType.blacksmith: 'The Blacksmith mended gear for the road ahead.',
+  BuildingType.healer: 'The Healer tended wounds and eased the journey.',
+  BuildingType.market: 'The Market stocked adventurers for the road.',
+};
+
+const Map<BuildingType, String> _missedNarrative = {
+  BuildingType.inn: "The Inn's beds filled up, and a tired traveler moved on.",
+  BuildingType.tavern:
+      'Every table was taken, and hungry adventurers passed the Tavern by.',
+  BuildingType.blacksmith:
+      "The Blacksmith couldn't reach every blade before the rush passed.",
+  BuildingType.healer:
+      "The Healer couldn't see everyone who needed care this time.",
+  BuildingType.market: 'The Market ran short, and some left without supplies.',
+};
+
+String _upgradeNarrative(
+  BuildingType building,
+  DemandType? demand,
+  UpgradeAxis axis,
+  String? level,
+) {
+  final name = buildingName(building);
+  final demandLabel = demand == null ? 'demand' : '${demandName(demand)} demand';
+  final levelLabel =
+      level == null ? '' : ' (${_upgradeAxisLabel(axis)} Lv $level)';
+  switch (axis) {
+    case UpgradeAxis.capacity:
+      return 'The $name can serve more $demandLabel now — '
+          'more adventurers helped.$levelLabel';
+    case UpgradeAxis.value:
+      return 'The $name now earns more Gold from every '
+          '$demandLabel served.$levelLabel';
   }
 }
 

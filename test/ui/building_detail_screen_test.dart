@@ -86,8 +86,14 @@ void main() {
     await _openBuildingDetail(tester, 'Tavern');
     await _expectVisibleText(tester, 'Recent Activity');
 
-    expect(find.text('Tavern served Food demand.'), findsOneWidget);
-    expect(find.text('Inn served Rest demand.'), findsNothing);
+    expect(
+      find.text('The Tavern served hot meals to hungry adventurers.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('The Inn welcomed weary adventurers in to rest.'),
+      findsNothing,
+    );
   });
 
   testWidgets('Building Detail renders recent activity empty state',

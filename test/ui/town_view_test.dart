@@ -51,8 +51,14 @@ void main() {
       ),
     );
 
-    expect(find.text('Tavern served Food demand.'), findsOneWidget);
-    expect(find.text('Inn missed Rest demand.'), findsOneWidget);
+    expect(
+      find.text('The Tavern served hot meals to hungry adventurers.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text("The Inn's beds filled up, and a tired traveler moved on."),
+      findsOneWidget,
+    );
   });
 
   testWidgets('Building Cards display demand mapping, levels, and utilization',

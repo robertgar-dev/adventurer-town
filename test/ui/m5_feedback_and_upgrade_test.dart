@@ -70,8 +70,14 @@ void main() {
         ),
       );
 
-      expect(find.text('Tavern served Food demand.'), findsOneWidget);
-      expect(find.text('Inn missed Rest demand.'), findsOneWidget);
+      expect(
+        find.text('The Tavern served hot meals to hungry adventurers.'),
+        findsOneWidget,
+      );
+      expect(
+        find.text("The Inn's beds filled up, and a tired traveler moved on."),
+        findsOneWidget,
+      );
     });
   });
 
@@ -164,7 +170,11 @@ void main() {
       expect(find.text('Next Cost 100 Gold'), findsWidgets);
 
       // Player-facing "what changed" feedback appears in Recent Activity above.
-      await _scrollUpTo(tester, 'Tavern Capacity upgraded to Level 2.');
+      await _scrollUpTo(
+        tester,
+        'The Tavern can serve more Food demand now — '
+        'more adventurers helped. (Capacity Lv 2)',
+      );
 
       // Gold was spent (persisted), proving the purchase took effect.
       final state = await repository.loadState();
