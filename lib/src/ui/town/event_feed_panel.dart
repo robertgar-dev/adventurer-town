@@ -9,6 +9,7 @@ class EventFeedPanel extends StatelessWidget {
     required this.entries,
     required this.emptyMessage,
     this.maxVisibleEntries = 5,
+    this.showResourceDeltas = false,
     super.key,
   });
 
@@ -16,6 +17,10 @@ class EventFeedPanel extends StatelessWidget {
   final List<EventFeedItemViewModel> entries;
   final String emptyMessage;
   final int maxVisibleEntries;
+
+  /// WP-M6-05: when true, each row also shows the Gold/Reputation delta that
+  /// the event produced (derived from existing event data).
+  final bool showResourceDeltas;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +52,10 @@ class EventFeedPanel extends StatelessWidget {
               )
             else
               for (final entry in visibleEntries) ...[
-                _EventFeedRow(entry: entry),
+                _EventFeedRow(
+                  entry: entry,
+                  showResourceDeltas: showResourceDeltas,
+                ),
                 if (entry != visibleEntries.last) const SizedBox(height: 8),
               ],
           ],
@@ -60,12 +68,15 @@ class EventFeedPanel extends StatelessWidget {
 class _EventFeedRow extends StatelessWidget {
   const _EventFeedRow({
     required this.entry,
+    this.showResourceDeltas = false,
   });
 
   final EventFeedItemViewModel entry;
+  final bool showResourceDeltas;
 
   @override
   Widget build(BuildContext context) {
+    final deltaLabel = _deltaLabel(entry);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -80,6 +91,13 @@ class _EventFeedRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(entry.description),
+              if (showResourceDeltas && deltaLabel != null)
+                Text(
+                  deltaLabel,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                ),
               Text(
                 'Tick ${entry.createdTick}',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -91,6 +109,21 @@ class _EventFeedRow extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String? _deltaLabel(EventFeedItemViewModel entry) {
+    final parts = <String>[];
+    if (entry.goldDelta != 0) {
+      parts.add('${_signed(entry.goldDelta)} Gold');
+    }
+    if (entry.reputationDelta != 0) {
+      parts.add('${_signed(entry.reputationDelta)} Reputation');
+    }
+    return parts.isEmpty ? null : parts.join(', ');
+  }
+
+  String _signed(int value) {
+    return value > 0 ? '+$value' : '$value';
   }
 
   IconData _iconFor(EventFeedItemViewModel entry) {

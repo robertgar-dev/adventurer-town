@@ -50,11 +50,23 @@ class BuildingDetailViewModel {
     required this.buildingType,
     required this.name,
     required this.demandName,
+    required this.purposeDescription,
     required this.capacityLevel,
     required this.valueLevel,
+    required this.capacityPerTick,
     required this.utilizationLabel,
     required this.utilizationPercent,
+    required this.recentDemandReceived,
+    required this.recentDemandServed,
     required this.recentLostDemand,
+    required this.recentGoldEarned,
+    required this.lifetimeDemandServed,
+    required this.lifetimeDemandReceived,
+    required this.lifetimeDemandLost,
+    required this.lifetimeGoldEarned,
+    required this.isUnderPressure,
+    required this.isPrimaryBottleneck,
+    required this.pressureSummary,
     required this.isConstructed,
     required this.capacityUpgrade,
     required this.valueUpgrade,
@@ -65,11 +77,30 @@ class BuildingDetailViewModel {
   final BuildingType buildingType;
   final String name;
   final String demandName;
+
+  /// WP-M6-01: a one-line, derived explanation of what the building does and
+  /// what each upgrade axis affects.
+  final String purposeDescription;
   final int capacityLevel;
   final int valueLevel;
+
+  /// WP-M6-04: derived from [EconomyConstants.effectiveCapacity].
+  final int capacityPerTick;
   final String utilizationLabel;
   final int utilizationPercent;
+  final int recentDemandReceived;
+  final int recentDemandServed;
   final int recentLostDemand;
+  final int recentGoldEarned;
+  final int lifetimeDemandServed;
+  final int lifetimeDemandReceived;
+  final int lifetimeDemandLost;
+  final int lifetimeGoldEarned;
+
+  /// WP-M6-03: derived pressure/bottleneck signals.
+  final bool isUnderPressure;
+  final bool isPrimaryBottleneck;
+  final String pressureSummary;
   final bool isConstructed;
   final UpgradeActionViewModel capacityUpgrade;
   final UpgradeActionViewModel valueUpgrade;
@@ -82,6 +113,7 @@ class UpgradeActionViewModel {
     required this.buttonLabel,
     required this.currentLevelLabel,
     required this.costLabel,
+    required this.effectLabel,
     required this.statusLabel,
     required this.canPurchase,
     required this.isMaxLevel,
@@ -92,6 +124,9 @@ class UpgradeActionViewModel {
   final String buttonLabel;
   final String currentLevelLabel;
   final String costLabel;
+
+  /// WP-M6-02: derived before -> after effect of buying the next level.
+  final String effectLabel;
   final String statusLabel;
   final bool canPurchase;
   final bool isMaxLevel;
@@ -182,8 +217,25 @@ final buildingDetailProvider =
   return buildingDetailViewModelFor(
     building: building,
     resources: state.resources,
+    isPrimaryBottleneck: _primaryBottleneckType(state) == building.buildingType,
   );
 });
+
+/// WP-M6-03: derives the town's primary bottleneck (the constructed building
+/// losing the most demand) from existing building metrics. No new state.
+BuildingType? _primaryBottleneckType(SimulationState state) {
+  Building? worst;
+  for (final building in state.buildings.values) {
+    if (!building.isConstructed || building.lifetimeDemandLost <= 0) {
+      continue;
+    }
+    if (worst == null ||
+        building.lifetimeDemandLost > worst.lifetimeDemandLost) {
+      worst = building;
+    }
+  }
+  return worst?.buildingType;
+}
 
 final buildingRecentActivityProvider =
     Provider.family<List<EventFeedItemViewModel>, BuildingType>((ref, type) {
@@ -197,18 +249,38 @@ final buildingRecentActivityProvider =
 BuildingDetailViewModel buildingDetailViewModelFor({
   required Building building,
   required Resources resources,
+  bool isPrimaryBottleneck = false,
 }) {
+  final isUnderPressure =
+      building.utilizationState == UtilizationState.overloaded ||
+          building.recentDemandLost > 0;
+
   return BuildingDetailViewModel(
     buildingId: building.id,
     building: building,
     buildingType: building.buildingType,
     name: buildingName(building.buildingType),
     demandName: demandName(building.servedDemandType),
+    purposeDescription: _purposeDescription(building),
     capacityLevel: building.capacityLevel,
     valueLevel: building.valueLevel,
+    capacityPerTick: building.capacityPerTick,
     utilizationLabel: utilizationLabel(building.utilizationState),
     utilizationPercent: (building.utilizationRatio * 100).round(),
+    recentDemandReceived: building.recentDemandReceived,
+    recentDemandServed: building.recentDemandServed,
     recentLostDemand: building.recentDemandLost,
+    recentGoldEarned: building.recentGoldEarned,
+    lifetimeDemandServed: building.lifetimeDemandServed,
+    lifetimeDemandReceived: building.lifetimeDemandReceived,
+    lifetimeDemandLost: building.lifetimeDemandLost,
+    lifetimeGoldEarned: building.lifetimeGoldEarned,
+    isUnderPressure: isUnderPressure,
+    isPrimaryBottleneck: isPrimaryBottleneck,
+    pressureSummary: _pressureSummary(
+      building: building,
+      isPrimaryBottleneck: isPrimaryBottleneck,
+    ),
     isConstructed: building.isConstructed,
     capacityUpgrade: _upgradeActionViewModel(
       UpgradeRules.quote(
@@ -216,6 +288,7 @@ BuildingDetailViewModel buildingDetailViewModelFor({
         resources: resources,
         axis: UpgradeAxis.capacity,
       ),
+      building,
     ),
     valueUpgrade: _upgradeActionViewModel(
       UpgradeRules.quote(
@@ -223,8 +296,35 @@ BuildingDetailViewModel buildingDetailViewModelFor({
         resources: resources,
         axis: UpgradeAxis.value,
       ),
+      building,
     ),
   );
+}
+
+String _purposeDescription(Building building) {
+  final name = buildingName(building.buildingType);
+  final demand = demandName(building.servedDemandType);
+  return '$name serves $demand demand. Capacity sets how many adventurers it '
+      'can serve each tick; Value sets the Gold earned per service.';
+}
+
+String _pressureSummary({
+  required Building building,
+  required bool isPrimaryBottleneck,
+}) {
+  if (isPrimaryBottleneck) {
+    return 'Top bottleneck in town: this building is losing the most demand. '
+        'A Capacity upgrade recovers the most throughput.';
+  }
+  if (building.utilizationState == UtilizationState.overloaded ||
+      building.recentDemandLost > 0) {
+    return 'Under pressure: demand is being lost at the current capacity. '
+        'Consider a Capacity upgrade.';
+  }
+  if (building.utilizationState == UtilizationState.busy) {
+    return 'Busy: nearing capacity. Watch for lost demand.';
+  }
+  return 'Healthy: serving demand within the current capacity.';
 }
 
 EventFeedItemViewModel? _eventFeedItemViewModelFor(EventFeedEntry entry) {
@@ -307,7 +407,10 @@ String utilizationLabel(UtilizationState state) {
   }
 }
 
-UpgradeActionViewModel _upgradeActionViewModel(UpgradeQuote quote) {
+UpgradeActionViewModel _upgradeActionViewModel(
+  UpgradeQuote quote,
+  Building building,
+) {
   final title = _upgradeTitle(quote.axis);
   return UpgradeActionViewModel(
     axis: quote.axis,
@@ -315,10 +418,49 @@ UpgradeActionViewModel _upgradeActionViewModel(UpgradeQuote quote) {
     buttonLabel: 'Upgrade ${_upgradeAxisLabel(quote.axis)}',
     currentLevelLabel: 'Current Level ${quote.currentLevel}',
     costLabel: quote.isMaxLevel ? 'Max Level' : 'Next Cost ${quote.cost} Gold',
+    effectLabel: _upgradeEffectLabel(quote, building),
     statusLabel: _upgradeStatusLabel(quote),
     canPurchase: quote.canPurchase,
     isMaxLevel: quote.isMaxLevel,
   );
+}
+
+/// WP-M6-02: derives the before -> after effect of the next level purely from
+/// approved economy constants. No simulation is run and no state is stored.
+String _upgradeEffectLabel(UpgradeQuote quote, Building building) {
+  final nextLevel = quote.nextLevel;
+  if (quote.isMaxLevel || nextLevel == null) {
+    return 'At maximum level';
+  }
+
+  switch (quote.axis) {
+    case UpgradeAxis.capacity:
+      final current = EconomyConstants.effectiveCapacity(
+        building.buildingType,
+        quote.currentLevel,
+      );
+      final next = EconomyConstants.effectiveCapacity(
+        building.buildingType,
+        nextLevel,
+      );
+      return 'Serves $current -> $next per tick';
+    case UpgradeAxis.value:
+      final reward =
+          EconomyConstants.demandGoldReward[building.servedDemandType] ?? 0;
+      final current = (reward *
+              EconomyConstants.buildingValueMultiplier(
+                building.buildingType,
+                quote.currentLevel,
+              ))
+          .floor();
+      final next = (reward *
+              EconomyConstants.buildingValueMultiplier(
+                building.buildingType,
+                nextLevel,
+              ))
+          .floor();
+      return 'Gold per service $current -> $next';
+  }
 }
 
 String _upgradeStatusLabel(UpgradeQuote quote) {

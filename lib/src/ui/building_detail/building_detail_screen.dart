@@ -39,7 +39,21 @@ class BuildingDetailScreen extends ConsumerWidget {
               detail.name,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
+            const SizedBox(height: 6),
+            Text(
+              detail.purposeDescription,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+            ),
             const SizedBox(height: 16),
+            _PressureCallout(
+              summary: detail.pressureSummary,
+              highlighted:
+                  detail.isUnderPressure || detail.isPrimaryBottleneck,
+              isPrimaryBottleneck: detail.isPrimaryBottleneck,
+            ),
+            const SizedBox(height: 12),
             _DetailSection(
               title: 'Building Summary',
               children: [
@@ -73,10 +87,40 @@ class BuildingDetailScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 12),
+            _DetailSection(
+              title: 'Recent Performance',
+              children: [
+                _DetailRow(
+                  label: 'Capacity per tick',
+                  value: '${detail.capacityPerTick} / tick',
+                ),
+                _DetailRow(
+                  label: 'Recent received / served / lost',
+                  value: '${detail.recentDemandReceived} / '
+                      '${detail.recentDemandServed} / '
+                      '${detail.recentLostDemand}',
+                ),
+                _DetailRow(
+                  label: 'Recent Gold earned',
+                  value: '${detail.recentGoldEarned} Gold',
+                ),
+                _DetailRow(
+                  label: 'Lifetime served / lost',
+                  value: '${detail.lifetimeDemandServed} / '
+                      '${detail.lifetimeDemandLost}',
+                ),
+                _DetailRow(
+                  label: 'Lifetime Gold earned',
+                  value: '${detail.lifetimeGoldEarned} Gold',
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
             EventFeedPanel(
               title: 'Recent Activity',
               entries: recentActivity,
               emptyMessage: 'No recent activity.',
+              showResourceDeltas: true,
             ),
             const SizedBox(height: 12),
             _DetailSection(
@@ -118,6 +162,59 @@ class BuildingDetailScreen extends ConsumerWidget {
   }
 }
 
+class _PressureCallout extends StatelessWidget {
+  const _PressureCallout({
+    required this.summary,
+    required this.highlighted,
+    required this.isPrimaryBottleneck,
+  });
+
+  final String summary;
+  final bool highlighted;
+  final bool isPrimaryBottleneck;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final accent = highlighted ? colorScheme.error : colorScheme.primary;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: accent),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              highlighted
+                  ? Icons.warning_amber_outlined
+                  : Icons.check_circle_outline,
+              size: 18,
+              color: accent,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    isPrimaryBottleneck ? 'Primary Bottleneck' : 'Service Pressure',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(summary),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _UpgradePanel extends StatelessWidget {
   const _UpgradePanel({
     required this.action,
@@ -148,6 +245,7 @@ class _UpgradePanel extends StatelessWidget {
             const SizedBox(height: 8),
             Text(action.currentLevelLabel),
             Text(action.costLabel),
+            Text(action.effectLabel),
             Text(action.statusLabel),
             const SizedBox(height: 10),
             FilledButton.icon(
