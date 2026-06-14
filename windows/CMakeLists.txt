@@ -10,6 +10,17 @@ set(BINARY_NAME "adventurer_town")
 # versions of CMake.
 cmake_policy(VERSION 3.14...3.25)
 
+# Some bundled plugin dependencies (notably the Firebase C++ SDK) still declare
+# `cmake_minimum_required` below 3.5, which CMake >= 4.0 rejects with
+# "Compatibility with CMake < 3.5 has been removed from CMake". Provide a policy
+# version floor so those subprojects configure on modern CMake toolchains.
+# This is a build-time compatibility shim only: it does not affect the app,
+# simulation rules, persistence semantics, or analytics behavior. A user or CI
+# override of CMAKE_POLICY_VERSION_MINIMUM still takes precedence.
+if(NOT DEFINED CMAKE_POLICY_VERSION_MINIMUM)
+  set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+endif()
+
 # Define build configuration option.
 get_property(IS_MULTICONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(IS_MULTICONFIG)
