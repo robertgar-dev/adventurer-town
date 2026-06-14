@@ -146,6 +146,7 @@ SimulationState _townState({
   );
 
   return initial.copyWith(
+    lastResolvedTickAtUtc: DateTime.now().toUtc(),
     resources: const Resources(
       gold: 123,
       reputation: 45,

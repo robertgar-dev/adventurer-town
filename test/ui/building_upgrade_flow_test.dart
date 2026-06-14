@@ -156,6 +156,7 @@ SimulationState _upgradeState({
   );
 
   return initial.copyWith(
+    lastResolvedTickAtUtc: DateTime.now().toUtc(),
     resources: Resources(
       gold: gold,
       reputation: reputation,

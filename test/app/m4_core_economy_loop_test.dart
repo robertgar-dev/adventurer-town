@@ -332,6 +332,7 @@ SimulationState _seedState({
   );
 
   return initial.copyWith(
+    lastResolvedTickAtUtc: DateTime.now().toUtc(),
     resources: _resources(gold: gold, reputation: reputation),
     buildings: buildings,
   );

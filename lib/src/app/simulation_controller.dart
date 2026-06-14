@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../analytics/analytics_service.dart';
 import '../domain/domain.dart';
 import '../persistence/persistence.dart';
+import '../simulation/offline_progression.dart';
 import '../simulation/simulation_engine.dart';
 
 class SimulationControllerState {
@@ -13,6 +14,7 @@ class SimulationControllerState {
     required this.isLoading,
     required this.errorMessage,
     required this.isTicking,
+    this.offlineSummary,
   });
 
   factory SimulationControllerState.initial() {
@@ -29,17 +31,25 @@ class SimulationControllerState {
   final String? errorMessage;
   final bool isTicking;
 
+  /// WP-M7-06: set once after offline resolution so the UI can show a minimal
+  /// return summary; cleared when the player dismisses it.
+  final OfflineResolution? offlineSummary;
+
   SimulationControllerState copyWith({
     SimulationState? simulationState,
     bool? isLoading,
     String? errorMessage,
     bool? isTicking,
+    OfflineResolution? offlineSummary,
+    bool clearOfflineSummary = false,
   }) {
     return SimulationControllerState(
       simulationState: simulationState ?? this.simulationState,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage,
       isTicking: isTicking ?? this.isTicking,
+      offlineSummary:
+          clearOfflineSummary ? null : (offlineSummary ?? this.offlineSummary),
     );
   }
 }
@@ -49,18 +59,22 @@ class SimulationController extends StateNotifier<SimulationControllerState> {
     required SimulationRepository repository,
     required SimulationEngine engine,
     required AnalyticsService analyticsService,
+    OfflineProgressionResolver? offlineResolver,
     Duration activeTickInterval = const Duration(
       seconds: SimulationState.fixedTickIntervalSeconds,
     ),
   })  : _repository = repository,
         _engine = engine,
         _analyticsService = analyticsService,
+        _offlineResolver =
+            offlineResolver ?? OfflineProgressionResolver(engine: engine),
         _activeTickInterval = activeTickInterval,
         super(SimulationControllerState.initial());
 
   final SimulationRepository _repository;
   final SimulationEngine _engine;
   final AnalyticsService _analyticsService;
+  final OfflineProgressionResolver _offlineResolver;
   final Duration _activeTickInterval;
 
   Timer? _timer;
@@ -74,13 +88,30 @@ class SimulationController extends StateNotifier<SimulationControllerState> {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
       final loaded = await _repository.loadState();
+
+      // WP-M7-03: resolve any offline progression once, immediately after load,
+      // and persist the resolved state before live ticking begins. This runs
+      // before startActiveLoop(), so there is never concurrent active ticking.
+      final resolution = _offlineResolver.resolve(
+        loaded,
+        nowUtc: DateTime.now().toUtc(),
+      );
+      var current = loaded;
+      OfflineResolution? summary;
+      if (resolution.didResolve) {
+        current = resolution.state;
+        await _repository.saveState(current);
+        summary = resolution;
+      }
+
       if (!mounted) {
         return;
       }
       state = state.copyWith(
-        simulationState: loaded,
+        simulationState: current,
         isLoading: false,
         errorMessage: null,
+        offlineSummary: summary,
       );
       await _analyticsService.logEvent('foundation_state_loaded');
     } catch (error) {
@@ -186,6 +217,13 @@ class SimulationController extends StateNotifier<SimulationControllerState> {
       }
       return false;
     }
+  }
+
+  void dismissOfflineSummary() {
+    if (!mounted) {
+      return;
+    }
+    state = state.copyWith(clearOfflineSummary: true);
   }
 
   void startActiveLoop() {

@@ -292,6 +292,7 @@ SimulationState _state({
   );
 
   return initial.copyWith(
+    lastResolvedTickAtUtc: DateTime.now().toUtc(),
     resources: Resources(
       gold: gold,
       reputation: 0,

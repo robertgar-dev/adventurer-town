@@ -205,6 +205,7 @@ SimulationState _detailState({
   );
 
   return initial.copyWith(
+    lastResolvedTickAtUtc: DateTime.now().toUtc(),
     buildings: buildings,
     eventFeed: eventFeed,
   );

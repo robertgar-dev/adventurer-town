@@ -6,6 +6,7 @@ import '../../app/town_view_models.dart';
 import '../building_detail/building_detail_screen.dart';
 import 'building_card.dart';
 import 'event_feed_panel.dart';
+import 'offline_summary_banner.dart';
 import 'resource_header.dart';
 
 class TownView extends ConsumerWidget {
@@ -49,6 +50,18 @@ class TownView extends ConsumerWidget {
           key: const Key('town-view-list'),
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
+            if (controllerState.offlineSummary case final summary?) ...[
+              OfflineSummaryBanner(
+                elapsedSeconds: summary.elapsedSeconds,
+                goldEarned: summary.goldEarned,
+                demandServed: summary.demandServed,
+                demandMissed: summary.demandMissed,
+                onDismiss: () => ref
+                    .read(simulationControllerProvider.notifier)
+                    .dismissOfflineSummary(),
+              ),
+              const SizedBox(height: 16),
+            ],
             ResourceHeader(resources: resources),
             if (controllerState.errorMessage != null) ...[
               const SizedBox(height: 12),

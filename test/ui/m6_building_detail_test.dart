@@ -222,6 +222,7 @@ SimulationState _bottleneckState({List<EventFeedEntry> eventFeed = const []}) {
   );
 
   return initial.copyWith(
+    lastResolvedTickAtUtc: DateTime.now().toUtc(),
     resources: _res(200),
     buildings: buildings,
     eventFeed: eventFeed,

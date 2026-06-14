@@ -17,6 +17,7 @@ class SimulationEngine {
   SimulationTickResult tick(
     SimulationState state, {
     DateTime? resolvedAtUtc,
+    bool offline = false,
   }) {
     final processingTick = state.currentTick + 1;
     final now = (resolvedAtUtc ?? DateTime.now()).toUtc();
@@ -33,7 +34,7 @@ class SimulationEngine {
       for (final type in BuildingType.values) type: 0,
     };
 
-    final generated = _generateDemands(state, processingTick);
+    final generated = _generateDemands(state, processingTick, offline);
     for (final entry in generated.entries) {
       final adventurer = entry.key;
       final demand = entry.value;
@@ -175,6 +176,7 @@ class SimulationEngine {
     SimulationState initialState, {
     required int count,
     DateTime? firstResolvedAtUtc,
+    bool offline = false,
   }) {
     var state = initialState;
     final emittedEvents = <EventFeedEntry>[];
@@ -187,6 +189,7 @@ class SimulationEngine {
         resolvedAtUtc: start.add(
           Duration(seconds: SimulationState.fixedTickIntervalSeconds * i),
         ),
+        offline: offline,
       );
       state = result.state;
       emittedEvents.addAll(result.emittedEvents);
@@ -201,6 +204,7 @@ class SimulationEngine {
   Map<Adventurer, Demand> _generateDemands(
     SimulationState state,
     int processingTick,
+    bool offline,
   ) {
     final constructedBuildings = {
       for (final entry in state.buildings.entries)
@@ -243,6 +247,7 @@ class SimulationEngine {
           createdTick: processingTick,
           goldValue: EconomyConstants.demandGoldReward[demandType]!,
           reputationValue: EconomyConstants.demandReputationReward[demandType]!,
+          wasOfflineResolved: offline,
         );
         generated[adventurer] = demand;
       }
