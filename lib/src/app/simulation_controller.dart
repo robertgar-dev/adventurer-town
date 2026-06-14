@@ -8,6 +8,15 @@ import '../persistence/persistence.dart';
 import '../simulation/offline_progression.dart';
 import '../simulation/simulation_engine.dart';
 
+/// The one-time onboarding hints M9 can surface. Display-state only.
+enum OnboardingHint {
+  welcome,
+  resources,
+  eventFeed,
+  buildingDetail,
+  offline,
+}
+
 class SimulationControllerState {
   const SimulationControllerState({
     required this.simulationState,
@@ -224,6 +233,50 @@ class SimulationController extends StateNotifier<SimulationControllerState> {
       return;
     }
     state = state.copyWith(clearOfflineSummary: true);
+  }
+
+  /// M9: records that a one-time onboarding hint has been seen, persisting the
+  /// flag in [GameSettings]. Idempotent — a no-op if already seen. This only
+  /// touches non-economy display state; simulation fields are untouched.
+  Future<void> markOnboardingHintSeen(OnboardingHint hint) async {
+    final current = state.simulationState;
+    if (current == null) {
+      return;
+    }
+    final settings = current.settings;
+    if (_onboardingHintSeen(settings, hint)) {
+      return;
+    }
+
+    final nextSettings = switch (hint) {
+      OnboardingHint.welcome => settings.copyWith(welcomeSeen: true),
+      OnboardingHint.resources => settings.copyWith(resourcesHintSeen: true),
+      OnboardingHint.eventFeed => settings.copyWith(eventFeedHintSeen: true),
+      OnboardingHint.buildingDetail =>
+        settings.copyWith(buildingDetailHintSeen: true),
+      OnboardingHint.offline => settings.copyWith(offlineHintSeen: true),
+    };
+
+    final nextState = current.copyWith(settings: nextSettings);
+    if (mounted) {
+      state = state.copyWith(simulationState: nextState);
+    }
+    await _repository.saveState(nextState);
+  }
+
+  static bool _onboardingHintSeen(GameSettings settings, OnboardingHint hint) {
+    switch (hint) {
+      case OnboardingHint.welcome:
+        return settings.welcomeSeen;
+      case OnboardingHint.resources:
+        return settings.resourcesHintSeen;
+      case OnboardingHint.eventFeed:
+        return settings.eventFeedHintSeen;
+      case OnboardingHint.buildingDetail:
+        return settings.buildingDetailHintSeen;
+      case OnboardingHint.offline:
+        return settings.offlineHintSeen;
+    }
   }
 
   void startActiveLoop() {

@@ -10,6 +10,7 @@ class OfflineSummaryBanner extends StatelessWidget {
     required this.demandServed,
     required this.demandMissed,
     required this.onDismiss,
+    this.onboardingNote,
     super.key,
   });
 
@@ -18,6 +19,10 @@ class OfflineSummaryBanner extends StatelessWidget {
   final int demandServed;
   final int demandMissed;
   final VoidCallback onDismiss;
+
+  /// M9: an optional one-time framing line shown on the first offline return
+  /// (e.g. "Reputation grows only while you're watching").
+  final String? onboardingNote;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +56,15 @@ class OfflineSummaryBanner extends StatelessWidget {
                   Text('Away ${_formatElapsed(elapsedSeconds)}'),
                   Text('+$goldEarned Gold'),
                   Text('$demandServed served, $demandMissed missed'),
+                  if (onboardingNote case final note?) ...[
+                    const SizedBox(height: 6),
+                    Text(
+                      note,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSecondaryContainer,
+                          ),
+                    ),
+                  ],
                 ],
               ),
             ),

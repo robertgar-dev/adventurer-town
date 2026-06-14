@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/app_providers.dart';
+import '../../app/simulation_controller.dart';
 import '../../app/town_view_models.dart';
 import '../../domain/domain.dart';
 import '../town/event_feed_panel.dart';
+import '../town/onboarding_card.dart';
 
 class BuildingDetailScreen extends ConsumerWidget {
   const BuildingDetailScreen({
@@ -26,6 +28,12 @@ class BuildingDetailScreen extends ConsumerWidget {
         );
     final recentActivity =
         ref.watch(buildingRecentActivityProvider(detail.buildingType));
+    final showCapacityValueHint = ref.watch(
+      simulationControllerProvider.select(
+        (state) => state.simulationState?.settings.buildingDetailHintSeen ==
+            false,
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -35,6 +43,15 @@ class BuildingDetailScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
+            if (showCapacityValueHint) ...[
+              OnboardingCard(
+                hint: OnboardingHint.buildingDetail,
+                onDismiss: () => ref
+                    .read(simulationControllerProvider.notifier)
+                    .markOnboardingHintSeen(OnboardingHint.buildingDetail),
+              ),
+              const SizedBox(height: 16),
+            ],
             Text(
               detail.name,
               style: Theme.of(context).textTheme.headlineSmall,

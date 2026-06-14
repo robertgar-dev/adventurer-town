@@ -6,6 +6,11 @@ class GameSettings {
     required this.analyticsEnabled,
     required this.eventFeedMaxEntries,
     required this.lastSeenOfflineSummaryAtUtc,
+    this.welcomeSeen = false,
+    this.resourcesHintSeen = false,
+    this.eventFeedHintSeen = false,
+    this.buildingDetailHintSeen = false,
+    this.offlineHintSeen = false,
   });
 
   factory GameSettings.defaults() {
@@ -29,6 +34,13 @@ class GameSettings {
       lastSeenOfflineSummaryAtUtc: _nullableDateTime(
         json['lastSeenOfflineSummaryAtUtc'],
       ),
+      // M9 onboarding "seen" flags default false so a player who has never
+      // seen a hint (or a save from before M9) gets the onboarding once.
+      welcomeSeen: json['welcomeSeen'] == true,
+      resourcesHintSeen: json['resourcesHintSeen'] == true,
+      eventFeedHintSeen: json['eventFeedHintSeen'] == true,
+      buildingDetailHintSeen: json['buildingDetailHintSeen'] == true,
+      offlineHintSeen: json['offlineHintSeen'] == true,
     );
   }
 
@@ -39,6 +51,13 @@ class GameSettings {
   final int eventFeedMaxEntries;
   final DateTime? lastSeenOfflineSummaryAtUtc;
 
+  // M9 onboarding display state (presentation only; not simulation/economy).
+  final bool welcomeSeen;
+  final bool resourcesHintSeen;
+  final bool eventFeedHintSeen;
+  final bool buildingDetailHintSeen;
+  final bool offlineHintSeen;
+
   GameSettings copyWith({
     bool? soundEnabled,
     bool? musicEnabled,
@@ -46,6 +65,11 @@ class GameSettings {
     bool? analyticsEnabled,
     int? eventFeedMaxEntries,
     DateTime? lastSeenOfflineSummaryAtUtc,
+    bool? welcomeSeen,
+    bool? resourcesHintSeen,
+    bool? eventFeedHintSeen,
+    bool? buildingDetailHintSeen,
+    bool? offlineHintSeen,
   }) {
     return GameSettings(
       soundEnabled: soundEnabled ?? this.soundEnabled,
@@ -57,6 +81,12 @@ class GameSettings {
       ),
       lastSeenOfflineSummaryAtUtc:
           lastSeenOfflineSummaryAtUtc ?? this.lastSeenOfflineSummaryAtUtc,
+      welcomeSeen: welcomeSeen ?? this.welcomeSeen,
+      resourcesHintSeen: resourcesHintSeen ?? this.resourcesHintSeen,
+      eventFeedHintSeen: eventFeedHintSeen ?? this.eventFeedHintSeen,
+      buildingDetailHintSeen:
+          buildingDetailHintSeen ?? this.buildingDetailHintSeen,
+      offlineHintSeen: offlineHintSeen ?? this.offlineHintSeen,
     );
   }
 
@@ -69,6 +99,11 @@ class GameSettings {
       'eventFeedMaxEntries': eventFeedMaxEntries,
       'lastSeenOfflineSummaryAtUtc':
           lastSeenOfflineSummaryAtUtc?.toUtc().toIso8601String(),
+      'welcomeSeen': welcomeSeen,
+      'resourcesHintSeen': resourcesHintSeen,
+      'eventFeedHintSeen': eventFeedHintSeen,
+      'buildingDetailHintSeen': buildingDetailHintSeen,
+      'offlineHintSeen': offlineHintSeen,
     };
   }
 
