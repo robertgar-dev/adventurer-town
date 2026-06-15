@@ -11,6 +11,9 @@ class GameSettings {
     this.eventFeedHintSeen = false,
     this.buildingDetailHintSeen = false,
     this.offlineHintSeen = false,
+    this.firstSessionStarted = false,
+    this.firstUpgradePurchased = false,
+    this.onboardingCompleted = false,
   });
 
   factory GameSettings.defaults() {
@@ -41,6 +44,10 @@ class GameSettings {
       eventFeedHintSeen: json['eventFeedHintSeen'] == true,
       buildingDetailHintSeen: json['buildingDetailHintSeen'] == true,
       offlineHintSeen: json['offlineHintSeen'] == true,
+      // M10 emit-once analytics flags; default false, missing-key safe.
+      firstSessionStarted: json['firstSessionStarted'] == true,
+      firstUpgradePurchased: json['firstUpgradePurchased'] == true,
+      onboardingCompleted: json['onboardingCompleted'] == true,
     );
   }
 
@@ -58,6 +65,11 @@ class GameSettings {
   final bool buildingDetailHintSeen;
   final bool offlineHintSeen;
 
+  // M10 analytics emit-once flags (non-economy meta state).
+  final bool firstSessionStarted;
+  final bool firstUpgradePurchased;
+  final bool onboardingCompleted;
+
   GameSettings copyWith({
     bool? soundEnabled,
     bool? musicEnabled,
@@ -70,6 +82,9 @@ class GameSettings {
     bool? eventFeedHintSeen,
     bool? buildingDetailHintSeen,
     bool? offlineHintSeen,
+    bool? firstSessionStarted,
+    bool? firstUpgradePurchased,
+    bool? onboardingCompleted,
   }) {
     return GameSettings(
       soundEnabled: soundEnabled ?? this.soundEnabled,
@@ -87,6 +102,10 @@ class GameSettings {
       buildingDetailHintSeen:
           buildingDetailHintSeen ?? this.buildingDetailHintSeen,
       offlineHintSeen: offlineHintSeen ?? this.offlineHintSeen,
+      firstSessionStarted: firstSessionStarted ?? this.firstSessionStarted,
+      firstUpgradePurchased:
+          firstUpgradePurchased ?? this.firstUpgradePurchased,
+      onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
     );
   }
 
@@ -104,6 +123,9 @@ class GameSettings {
       'eventFeedHintSeen': eventFeedHintSeen,
       'buildingDetailHintSeen': buildingDetailHintSeen,
       'offlineHintSeen': offlineHintSeen,
+      'firstSessionStarted': firstSessionStarted,
+      'firstUpgradePurchased': firstUpgradePurchased,
+      'onboardingCompleted': onboardingCompleted,
     };
   }
 

@@ -47,6 +47,15 @@ class TownView extends ConsumerWidget {
       );
     }
 
+    // M10: signal that the Event Feed is meaningfully visible (has entries).
+    // The controller emits this at most once per session.
+    if (eventFeed.isNotEmpty) {
+      final controller = ref.read(simulationControllerProvider.notifier);
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => controller.notifyEventFeedSeen(),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Adventurer Town'),
@@ -100,7 +109,12 @@ class TownView extends ConsumerWidget {
             for (final building in buildings) ...[
               BuildingCard(
                 building: building,
-                onTap: () => _handleBuildingTap(context, building),
+                onTap: () {
+                  ref
+                      .read(simulationControllerProvider.notifier)
+                      .logBuildingDetailOpened(building.buildingType);
+                  _handleBuildingTap(context, building);
+                },
               ),
               const SizedBox(height: 12),
             ],

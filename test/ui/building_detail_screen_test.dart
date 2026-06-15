@@ -214,6 +214,9 @@ SimulationState _detailState({
     lastResolvedTickAtUtc: DateTime.now().toUtc(),
     buildings: buildings,
     eventFeed: eventFeed,
+    // Returning-player seed: the M10 first-session flag is already set, so
+    // loadOrCreate performs no settings write and the read-only check holds.
+    settings: initial.settings.copyWith(firstSessionStarted: true),
   );
 }
 

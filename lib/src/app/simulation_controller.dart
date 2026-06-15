@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../analytics/analytics_events.dart';
 import '../analytics/analytics_service.dart';
 import '../domain/domain.dart';
 import '../persistence/persistence.dart';
@@ -88,6 +89,18 @@ class SimulationController extends StateNotifier<SimulationControllerState> {
 
   Timer? _timer;
   bool _tickInFlight = false;
+  bool _eventFeedSeenLogged = false;
+
+  /// M10: fire-and-forget analytics emit. Never awaited, never throws into
+  /// gameplay (errors are swallowed), so analytics can never block or break
+  /// the simulation, persistence, UI, onboarding, or upgrades.
+  void _emit(String name, [Map<String, Object?> properties = const {}]) {
+    unawaited(
+      _analyticsService
+          .logEvent(name, parameters: properties)
+          .catchError((Object _) {}),
+    );
+  }
 
   Future<void> loadOrCreate() async {
     if (!mounted) {
@@ -113,6 +126,15 @@ class SimulationController extends StateNotifier<SimulationControllerState> {
         summary = resolution;
       }
 
+      // M10: first local session on this save is emitted once and persisted.
+      final wasFirstSession = !current.settings.firstSessionStarted;
+      if (wasFirstSession) {
+        current = current.copyWith(
+          settings: current.settings.copyWith(firstSessionStarted: true),
+        );
+        await _repository.saveState(current);
+      }
+
       if (!mounted) {
         return;
       }
@@ -122,7 +144,30 @@ class SimulationController extends StateNotifier<SimulationControllerState> {
         errorMessage: null,
         offlineSummary: summary,
       );
-      await _analyticsService.logEvent('foundation_state_loaded');
+
+      // M10 analytics: emitted after the accepted load outcome, never awaited.
+      _emit(AnalyticsEvents.appStart, {
+        AnalyticsProperties.currentTick: current.currentTick,
+        AnalyticsProperties.gold: current.resources.gold,
+        AnalyticsProperties.reputation: current.resources.reputation,
+        AnalyticsProperties.isFirstSession: wasFirstSession ? 1 : 0,
+      });
+      if (wasFirstSession) {
+        _emit(AnalyticsEvents.firstSessionStarted, {
+          AnalyticsProperties.currentTick: current.currentTick,
+        });
+      }
+      if (summary != null) {
+        _emit(AnalyticsEvents.offlineReturnSeen, {
+          AnalyticsProperties.offlineElapsedSeconds: summary.elapsedSeconds,
+          AnalyticsProperties.demandServed: summary.demandServed,
+          AnalyticsProperties.demandMissed: summary.demandMissed,
+          AnalyticsProperties.gold: current.resources.gold,
+          AnalyticsProperties.reputation: current.resources.reputation,
+          AnalyticsProperties.currentTick: current.currentTick,
+          AnalyticsProperties.wasOffline: 1,
+        });
+      }
     } catch (error) {
       final fallback = SimulationState.newGame();
       await _repository.saveState(fallback);
@@ -204,10 +249,15 @@ class SimulationController extends StateNotifier<SimulationControllerState> {
         cost: cost,
         nextLevel: nextLevel,
       );
+      // M10: the first upgrade is emitted once; flag persisted alongside save.
+      final wasFirstUpgrade = !current.settings.firstUpgradePurchased;
       final nextState = current.copyWith(
         resources: current.resources.spendGold(cost),
         buildings: buildings,
         eventFeed: [event, ...current.eventFeed],
+        settings: wasFirstUpgrade
+            ? current.settings.copyWith(firstUpgradePurchased: true)
+            : null,
       );
 
       await _repository.saveState(nextState);
@@ -219,6 +269,24 @@ class SimulationController extends StateNotifier<SimulationControllerState> {
         simulationState: nextState,
         errorMessage: null,
       );
+
+      // M10 analytics: emitted after the accepted purchase outcome.
+      final upgradeProps = <String, Object?>{
+        AnalyticsProperties.buildingType: buildingType.code,
+        AnalyticsProperties.upgradeAxis: axis.code,
+        AnalyticsProperties.currentTick: nextState.currentTick,
+        AnalyticsProperties.gold: nextState.resources.gold,
+        AnalyticsProperties.reputation: nextState.resources.reputation,
+      };
+      _emit(
+        axis == UpgradeAxis.capacity
+            ? AnalyticsEvents.capacityUpgradePurchased
+            : AnalyticsEvents.valueUpgradePurchased,
+        upgradeProps,
+      );
+      if (wasFirstUpgrade) {
+        _emit(AnalyticsEvents.firstUpgradePurchased, upgradeProps);
+      }
       return true;
     } catch (error) {
       if (mounted) {
@@ -248,7 +316,7 @@ class SimulationController extends StateNotifier<SimulationControllerState> {
       return;
     }
 
-    final nextSettings = switch (hint) {
+    final markedSettings = switch (hint) {
       OnboardingHint.welcome => settings.copyWith(welcomeSeen: true),
       OnboardingHint.resources => settings.copyWith(resourcesHintSeen: true),
       OnboardingHint.eventFeed => settings.copyWith(eventFeedHintSeen: true),
@@ -257,11 +325,65 @@ class SimulationController extends StateNotifier<SimulationControllerState> {
       OnboardingHint.offline => settings.copyWith(offlineHintSeen: true),
     };
 
+    // M10: the minimum onboarding learning loop is the four teaching hints
+    // (welcome, Gold/Reputation, Event Feed, Capacity vs Value). The offline
+    // hint is excluded because a first session may never go offline.
+    final teachingComplete = markedSettings.welcomeSeen &&
+        markedSettings.resourcesHintSeen &&
+        markedSettings.eventFeedHintSeen &&
+        markedSettings.buildingDetailHintSeen;
+    final completedNow =
+        teachingComplete && !markedSettings.onboardingCompleted;
+    final nextSettings = completedNow
+        ? markedSettings.copyWith(onboardingCompleted: true)
+        : markedSettings;
+
     final nextState = current.copyWith(settings: nextSettings);
     if (mounted) {
       state = state.copyWith(simulationState: nextState);
     }
     await _repository.saveState(nextState);
+
+    // M10 analytics.
+    _emit(AnalyticsEvents.onboardingHintDismissed, {
+      AnalyticsProperties.hintId: hint.name,
+    });
+    if (completedNow) {
+      _emit(AnalyticsEvents.onboardingCompleted, {
+        AnalyticsProperties.currentTick: nextState.currentTick,
+      });
+    }
+  }
+
+  /// M10: UI signal that the player opened a Building Detail screen. Emitted
+  /// per open (a discrete user action), never in a render loop.
+  void logBuildingDetailOpened(BuildingType buildingType) {
+    if (!mounted) {
+      return;
+    }
+    final current = state.simulationState;
+    _emit(AnalyticsEvents.buildingDetailOpened, {
+      AnalyticsProperties.buildingType: buildingType.code,
+      AnalyticsProperties.currentTick: current?.currentTick ?? 0,
+      AnalyticsProperties.gold: current?.resources.gold ?? 0,
+      AnalyticsProperties.reputation: current?.resources.reputation ?? 0,
+    });
+  }
+
+  /// M10: UI signal that the Event Feed is meaningfully visible (it has
+  /// entries). Emitted at most once per session to stay event-light.
+  void notifyEventFeedSeen() {
+    if (!mounted || _eventFeedSeenLogged) {
+      return;
+    }
+    final current = state.simulationState;
+    if (current == null || current.eventFeed.isEmpty) {
+      return;
+    }
+    _eventFeedSeenLogged = true;
+    _emit(AnalyticsEvents.eventFeedSeen, {
+      AnalyticsProperties.currentTick: current.currentTick,
+    });
   }
 
   static bool _onboardingHintSeen(GameSettings settings, OnboardingHint hint) {
