@@ -18,6 +18,8 @@ final simulationEngineProvider = Provider<SimulationEngine>((ref) {
 });
 
 final analyticsServiceProvider = Provider<AnalyticsService>((ref) {
+  // Before swapping NoopAnalyticsService() -> FirebaseAnalyticsService, complete
+  // docs/Pre_Ship_Security_Compliance_Checklist.md (privacy/COPPA/data-safety).
   return const SafeAnalyticsService(NoopAnalyticsService());
 });
 
