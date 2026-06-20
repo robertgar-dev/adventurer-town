@@ -8,6 +8,7 @@ import '../../domain/domain.dart';
 import '../building_detail/building_detail_screen.dart';
 import 'building_card.dart';
 import 'event_feed_panel.dart';
+import 'notable_moments_panel.dart';
 import 'offline_summary_banner.dart';
 import 'onboarding_card.dart';
 import 'resource_header.dart';
@@ -21,6 +22,7 @@ class TownView extends ConsumerWidget {
     final resources = ref.watch(townResourcesProvider);
     final buildings = ref.watch(townBuildingCardsProvider);
     final eventFeed = ref.watch(townEventFeedProvider);
+    final notableMoments = ref.watch(townNotableMomentsProvider);
     final settings = controllerState.simulationState?.settings;
     final townHint = _activeTownHint(settings);
     final showOfflineNote = settings != null && !settings.offlineHintSeen;
@@ -71,6 +73,7 @@ class TownView extends ConsumerWidget {
                 goldEarned: summary.goldEarned,
                 demandServed: summary.demandServed,
                 demandMissed: summary.demandMissed,
+                storyLines: offlineStoryLines(eventFeed),
                 onboardingNote: showOfflineNote
                     ? onboardingHintCopy[OnboardingHint.offline]!.body
                     : null,
@@ -100,6 +103,10 @@ class TownView extends ConsumerWidget {
               _FallbackPanel(message: controllerState.errorMessage!),
             ],
             const SizedBox(height: 16),
+            if (notableMoments.isNotEmpty) ...[
+              NotableMomentsPanel(moments: notableMoments),
+              const SizedBox(height: 16),
+            ],
             EventFeedPanel(
               title: 'Event Feed',
               entries: eventFeed,

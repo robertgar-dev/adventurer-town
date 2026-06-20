@@ -82,7 +82,20 @@ void main() {
   testWidgets('Building Cards open read-only detail screens', (tester) async {
     await _pumpTownApp(tester, _townState());
 
-    await tester.tap(find.text('Tavern'));
+    // M12 Stage 1 added content above the building list, so the Tavern card may
+    // start below the initial build region; scroll it into view before tapping.
+    final tavern = find.text('Tavern');
+    if (tavern.evaluate().isEmpty) {
+      await tester.scrollUntilVisible(
+        tavern,
+        240,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+    }
+    await tester.ensureVisible(tavern.first);
+    await tester.pumpAndSettle();
+    await tester.tap(tavern.first);
     await tester.pumpAndSettle();
 
     expect(find.text('Building Summary'), findsOneWidget);

@@ -110,12 +110,26 @@ Future<void> _pumpTownApp(
 }
 
 Future<void> _openTavernDetail(WidgetTester tester) async {
-  await tester.tap(find.text('Tavern'));
+  // Scroll the Tavern card into view first: M12 Stage 1 added the Reputation
+  // trajectory caption and a notable-moments panel above the building list, so
+  // the card is no longer guaranteed to be built at the initial scroll offset.
+  final tavern = find.text('Tavern');
+  if (tavern.evaluate().isEmpty) {
+    await tester.scrollUntilVisible(
+      tavern,
+      240,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+  }
+  await tester.ensureVisible(tavern.first);
+  await tester.pumpAndSettle();
+  await tester.tap(tavern.first);
   await tester.pumpAndSettle();
   await tester.scrollUntilVisible(
     find.text('Upgrade Section'),
     240,
-    scrollable: find.byType(Scrollable),
+    scrollable: find.byType(Scrollable).first,
   );
   await tester.pumpAndSettle();
 }

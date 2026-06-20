@@ -11,6 +11,239 @@ class TownResourcesViewModel {
 
   final int gold;
   final int reputation;
+
+  /// WP-M12-01 (Stage 1): a derived, presentation-only reading of where the
+  /// town's earned trust is heading next. Computed from the live Reputation
+  /// value and the approved tier thresholds — no new state, never spent, never
+  /// earned offline.
+  ReputationDestination get reputationDestination =>
+      reputationDestinationFor(reputation);
+}
+
+/// WP-M12-01 (Stage 1): a derived "trust has somewhere to go" reading of
+/// Reputation. Reputation is earned trust, never a wallet: this surface shows a
+/// destination and a remaining amount to *earn*, and never implies spending or
+/// offline gain. Pure function of the current value and the approved
+/// [EconomyConstants.tierReputationUnlock] thresholds.
+class ReputationDestination {
+  const ReputationDestination({
+    required this.reputation,
+    required this.nextStandingReputation,
+    required this.reputationToNextStanding,
+    required this.nextStandingLabel,
+    required this.isAtHighestStanding,
+    required this.trajectoryText,
+  });
+
+  final int reputation;
+  final int? nextStandingReputation;
+  final int? reputationToNextStanding;
+  final String? nextStandingLabel;
+  final bool isAtHighestStanding;
+
+  /// A short, trust-framed caption safe to render next to the Reputation value.
+  final String trajectoryText;
+}
+
+/// Ordered standings above Novice, derived from the approved tier thresholds
+/// (Veteran 100, Elite 400, Legendary 1200). Labels are trust flavor only.
+const List<(int, String)> _reputationStandings = [
+  (100, 'seasoned adventurers'),
+  (400, 'elite adventurers'),
+  (1200, 'legendary champions'),
+];
+
+ReputationDestination reputationDestinationFor(int reputation) {
+  for (final (threshold, label) in _reputationStandings) {
+    if (reputation < threshold) {
+      final remaining = threshold - reputation;
+      return ReputationDestination(
+        reputation: reputation,
+        nextStandingReputation: threshold,
+        reputationToNextStanding: remaining,
+        nextStandingLabel: label,
+        isAtHighestStanding: false,
+        trajectoryText: 'Trust growing toward $label — $remaining more to earn',
+      );
+    }
+  }
+  return ReputationDestination(
+    reputation: reputation,
+    nextStandingReputation: null,
+    reputationToNextStanding: null,
+    nextStandingLabel: null,
+    isAtHighestStanding: true,
+    trajectoryText: 'Known and trusted across the land',
+  );
+}
+
+/// WP-M12-03 (Stage 1): a presentation-only "notable town moment" derived at
+/// render time from existing simulation state. It is NOT a simulation event,
+/// adds no [EventType], and is never emitted by the engine.
+class NotableMomentViewModel {
+  const NotableMomentViewModel({
+    required this.id,
+    required this.description,
+  });
+
+  final String id;
+  final String description;
+}
+
+/// Derives up to three notable moments from existing state: the town's current
+/// standing (trust reached), whether every service is open, and the building
+/// that has served the most adventurers. Economic-with-flavor only — no quest,
+/// no hero fiction, no new mechanics. Derived, capped, and order-stable.
+List<NotableMomentViewModel> deriveNotableMoments(SimulationState state) {
+  final moments = <NotableMomentViewModel>[];
+
+  final standing = _standingMoment(state.resources.reputation);
+  if (standing != null) {
+    moments.add(standing);
+  }
+
+  final constructed =
+      state.buildings.values.where((b) => b.isConstructed).length;
+  if (constructed >= BuildingType.values.length) {
+    moments.add(
+      const NotableMomentViewModel(
+        id: 'notable_all_services_open',
+        description: 'Every service in town is open — the Inn, Tavern, '
+            'Blacksmith, Healer, and Market all stand ready.',
+      ),
+    );
+  }
+
+  final carrier = _topServedBuilding(state.buildings.values);
+  if (carrier != null) {
+    moments.add(
+      NotableMomentViewModel(
+        id: 'notable_carrier_${carrier.buildingType.code}',
+        description: '${buildingName(carrier.buildingType)} has served more '
+            'adventurers than anywhere else in town.',
+      ),
+    );
+  }
+
+  return List.unmodifiable(moments.take(3));
+}
+
+NotableMomentViewModel? _standingMoment(int reputation) {
+  if (reputation >= 1200) {
+    return const NotableMomentViewModel(
+      id: 'notable_standing_1200',
+      description: 'Legends speak of this town — even the greatest champions '
+          'count on it.',
+    );
+  }
+  if (reputation >= 400) {
+    return const NotableMomentViewModel(
+      id: 'notable_standing_400',
+      description: "The town's name carries far — elite adventurers seek it "
+          'out.',
+    );
+  }
+  if (reputation >= 100) {
+    return const NotableMomentViewModel(
+      id: 'notable_standing_100',
+      description: 'Word has spread — seasoned adventurers now make the town a '
+          'stop on their road.',
+    );
+  }
+  return null;
+}
+
+Building? _topServedBuilding(Iterable<Building> buildings) {
+  Building? top;
+  for (final building in buildings) {
+    if (building.lifetimeDemandServed <= 0) {
+      continue;
+    }
+    if (top == null ||
+        building.lifetimeDemandServed > top.lifetimeDemandServed ||
+        (building.lifetimeDemandServed == top.lifetimeDemandServed &&
+            building.buildingType.index < top.buildingType.index)) {
+      top = building;
+    }
+  }
+  return top;
+}
+
+/// WP-M12-02 (Stage 1): derives a short, warm narration of the away window from
+/// the offline-flagged entries already in the feed. Strictly presentation-only:
+/// it reads existing view-model rows, computes nothing new in the simulation,
+/// and never implies Reputation, a backlog, demand recovery, or payment. Gold
+/// remains reported by the banner's honest scalars, not restated here.
+List<String> offlineStoryLines(List<EventFeedItemViewModel> feed) {
+  final served = <BuildingType, int>{};
+  final missed = <BuildingType, int>{};
+  for (final entry in feed) {
+    if (!entry.isOffline) {
+      continue;
+    }
+    final building = entry.buildingType;
+    if (building == null) {
+      continue;
+    }
+    if (entry.eventType == EventType.demandServed) {
+      served[building] = (served[building] ?? 0) + 1;
+    } else if (entry.eventType == EventType.demandMissed) {
+      missed[building] = (missed[building] ?? 0) + 1;
+    }
+  }
+
+  final lines = <String>[];
+  final busiest = _topCountBuilding(served);
+  if (busiest != null) {
+    lines.add(_offlineBusiestLine[busiest] ??
+        '${buildingName(busiest)} kept the town going while you were away.');
+  }
+  final mostMissed = _topCountBuilding(missed);
+  if (mostMissed != null) {
+    lines.add(_offlineMissedLine[mostMissed] ??
+        'Some adventurers passed the ${buildingName(mostMissed)} by before you '
+            'returned.');
+  }
+  return List.unmodifiable(lines.take(2));
+}
+
+const Map<BuildingType, String> _offlineBusiestLine = {
+  BuildingType.inn: 'The Inn gave the most travelers a place to rest while you '
+      'were away.',
+  BuildingType.tavern: 'The Tavern kept the town fed while you were away.',
+  BuildingType.blacksmith:
+      'The Blacksmith mended the most gear while you were away.',
+  BuildingType.healer:
+      'The Healer tended the most travelers while you were away.',
+  BuildingType.market:
+      'The Market stocked the most adventurers while you were away.',
+};
+
+const Map<BuildingType, String> _offlineMissedLine = {
+  BuildingType.inn:
+      'Some tired travelers found the Inn full and moved on before you '
+          'returned.',
+  BuildingType.tavern:
+      'A few hungry adventurers passed the Tavern by before you returned.',
+  BuildingType.blacksmith:
+      'Some blades went unmended at the Blacksmith before you returned.',
+  BuildingType.healer:
+      'A few who needed care moved on from the Healer before you returned.',
+  BuildingType.market:
+      'Some left the Market without supplies before you returned.',
+};
+
+BuildingType? _topCountBuilding(Map<BuildingType, int> counts) {
+  BuildingType? top;
+  var topCount = 0;
+  for (final type in BuildingType.values) {
+    final count = counts[type] ?? 0;
+    if (count > topCount) {
+      topCount = count;
+      top = type;
+    }
+  }
+  return top;
 }
 
 class BuildingCardViewModel {
@@ -202,6 +435,19 @@ final townEventFeedProvider = Provider<List<EventFeedItemViewModel>>((ref) {
     for (final entry in state.eventFeed)
       if (_eventFeedItemViewModelFor(entry) case final item?) item,
   ];
+});
+
+/// WP-M12-03 (Stage 1): presentation-only notable moments derived from existing
+/// state. No new simulation events; nothing is emitted by the engine.
+final townNotableMomentsProvider =
+    Provider<List<NotableMomentViewModel>>((ref) {
+  final state = ref.watch(
+    simulationControllerProvider.select((value) => value.simulationState),
+  );
+  if (state == null) {
+    return const [];
+  }
+  return deriveNotableMoments(state);
 });
 
 final buildingDetailProvider =

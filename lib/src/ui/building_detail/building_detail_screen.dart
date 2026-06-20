@@ -34,6 +34,15 @@ class BuildingDetailScreen extends ConsumerWidget {
             false,
       ),
     );
+    // WP-M12-04 (Stage 1): the first upgrade has not happened yet. Drives the
+    // stewardship "stakes" framing and the stronger first-time affirmation.
+    // Reads the existing persisted flag — no schema change.
+    final firstUpgradePending = ref.watch(
+      simulationControllerProvider.select(
+        (state) =>
+            state.simulationState?.settings.firstUpgradePurchased == false,
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -143,16 +152,22 @@ class BuildingDetailScreen extends ConsumerWidget {
             _DetailSection(
               title: 'Upgrade Section',
               children: [
+                // WP-M12-04: light stewardship framing before the first upgrade.
+                if (firstUpgradePending) ...[
+                  const _FirstUpgradeStakesNote(),
+                  const SizedBox(height: 12),
+                ],
                 _UpgradePanel(
                   action: detail.capacityUpgrade,
                   onPressed: detail.capacityUpgrade.canPurchase
                       ? () async {
-                          await ref
-                              .read(simulationControllerProvider.notifier)
-                              .upgradeBuilding(
-                                detail.buildingType,
-                                UpgradeAxis.capacity,
-                              );
+                          await _upgradeAndAffirm(
+                            context,
+                            ref,
+                            buildingType: detail.buildingType,
+                            axis: UpgradeAxis.capacity,
+                            wasFirstUpgrade: firstUpgradePending,
+                          );
                         }
                       : null,
                 ),
@@ -161,12 +176,13 @@ class BuildingDetailScreen extends ConsumerWidget {
                   action: detail.valueUpgrade,
                   onPressed: detail.valueUpgrade.canPurchase
                       ? () async {
-                          await ref
-                              .read(simulationControllerProvider.notifier)
-                              .upgradeBuilding(
-                                detail.buildingType,
-                                UpgradeAxis.value,
-                              );
+                          await _upgradeAndAffirm(
+                            context,
+                            ref,
+                            buildingType: detail.buildingType,
+                            axis: UpgradeAxis.value,
+                            wasFirstUpgrade: firstUpgradePending,
+                          );
                         }
                       : null,
                 ),
@@ -347,6 +363,87 @@ class _DetailRow extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// WP-M12-04 (Stage 1): performs the existing upgrade and, on success, shows a
+/// brief affirmation. The upgrade itself is unchanged — this only adds a
+/// presentation acknowledgement; it does not touch cost, gates, effects, or the
+/// atomic purchase logic in [SimulationController.upgradeBuilding].
+Future<void> _upgradeAndAffirm(
+  BuildContext context,
+  WidgetRef ref, {
+  required BuildingType buildingType,
+  required UpgradeAxis axis,
+  required bool wasFirstUpgrade,
+}) async {
+  // Capture the messenger before the await so context is not used afterwards.
+  final messenger = ScaffoldMessenger.of(context);
+  final ok = await ref
+      .read(simulationControllerProvider.notifier)
+      .upgradeBuilding(buildingType, axis);
+  if (!ok) {
+    return;
+  }
+  messenger
+    ..clearSnackBars()
+    ..showSnackBar(
+      SnackBar(
+        key: const Key('upgrade-affirmation'),
+        content: Text(
+          wasFirstUpgrade ? _firstUpgradeAffirmation : _upgradeAffirmation,
+        ),
+      ),
+    );
+}
+
+const String _firstUpgradeAffirmation =
+    'Your first improvement — the town is more capable now. This is stewardship: '
+    'you decide what the town is ready for.';
+
+const String _upgradeAffirmation =
+    'Upgrade complete — the town can do a little more for those who pass through.';
+
+/// WP-M12-04 (Stage 1): a calm, one-time stewardship framing shown before the
+/// first upgrade. Copy only; it reads as a decision the steward makes, never as
+/// a purchase prompt, a wager, or a power boost.
+class _FirstUpgradeStakesNote extends StatelessWidget {
+  const _FirstUpgradeStakesNote();
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      key: const Key('first-upgrade-stakes-note'),
+      decoration: BoxDecoration(
+        color: colorScheme.secondaryContainer,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.flag_outlined,
+              size: 18,
+              color: colorScheme.onSecondaryContainer,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Your first improvement is yours to choose. Capacity helps more '
+                'adventurers; Value earns more from each one served. Either way, '
+                'you are deciding what this town is ready for.',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSecondaryContainer,
+                    ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
