@@ -3,18 +3,36 @@ import 'dart:ui';
 
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
 import '../domain/building_art.dart';
 import '../domain/character_definition.dart';
 import '../domain/enums.dart';
+import '../domain/reaction.dart';
 
 /// One drawn occupant: which cast member, and the base sprite path to draw.
 class OccupantSpec {
-  const OccupantSpec({required this.characterId, required this.baseArtPath});
+  const OccupantSpec({
+    required this.characterId,
+    required this.baseArtPath,
+    this.displayName,
+    this.demandLabel,
+    this.tierLabel,
+    this.reaction,
+  });
 
   final String characterId;
   final String baseArtPath;
+
+  // Leg 1 identity read (resolved via CharacterDefinition; null in bare render
+  // tests). Surfaced as a minimal on-select label, never a character sheet.
+  final String? displayName;
+  final String? demandLabel;
+  final String? tierLabel;
+
+  // Leg 2 reaction STATE — held on the occupant, rendered as nothing yet.
+  final Reaction? reaction;
 }
 
 /// Hand-calibrated room slots (normalized within the shell), mirroring the FD7
@@ -43,6 +61,9 @@ class BuildingDetailGame extends FlameGame {
 
   final BuildingType buildingType;
   final BuildingGrade grade;
+
+  /// Leg 1: fired when an occupant is tapped, with its identity read.
+  void Function(OccupantSpec)? onOccupantSelected;
 
   final Images _images = Images(prefix: '');
   Rect _shellRect = Rect.zero;
@@ -106,6 +127,8 @@ class BuildingDetailGame extends FlameGame {
           _shellRect.left + slot.dx * _shellRect.width,
           _shellRect.top + slot.dy * _shellRect.height,
         ),
+        spec: occupants[i],
+        onSelect: onOccupantSelected,
       );
       await add(component);
       _occupants.add(component);
@@ -119,11 +142,13 @@ class BuildingDetailGame extends FlameGame {
 /// A flat-front, layer-stacked character: a soft ground-contact shadow (layer 0)
 /// plus the base sprite (layer 1), bottom-center anchored so the feet sit at the
 /// room slot. The four overlay slots are reserved but empty in slice 1.
-class CharacterSpriteComponent extends PositionComponent {
+class CharacterSpriteComponent extends PositionComponent with TapCallbacks {
   CharacterSpriteComponent({
     required Sprite sprite,
     required double height,
     required Vector2 position,
+    this.spec,
+    this.onSelect,
   })  : _sprite = sprite,
         super(
           position: position,
@@ -133,11 +158,27 @@ class CharacterSpriteComponent extends PositionComponent {
 
   final Sprite _sprite;
 
+  /// Leg 1 identity read + leg 2 reaction state for this occupant.
+  final OccupantSpec? spec;
+  final void Function(OccupantSpec)? onSelect;
+
   /// Reserved overlay layers above the base sprite — empty in slice 1 (no
   /// overlay art yet). Declared so the layer stack is ready to fill later.
   final Map<OverlaySlot, Sprite?> overlays = {
     for (final slot in OverlaySlot.values) slot: null,
   };
+
+  /// Leg 2: the reaction STATE held on this occupant. RENDERED AS NOTHING — the
+  /// Package C "beam" drops into this reserved slot once the FD7 re-render lands.
+  Reaction? get reaction => spec?.reaction;
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    final selected = spec;
+    if (selected != null) {
+      onSelect?.call(selected);
+    }
+  }
 
   @override
   Future<void> onLoad() async {
