@@ -5,6 +5,7 @@ import '../../app/app_providers.dart';
 import '../../app/simulation_controller.dart';
 import '../../app/town_view_models.dart';
 import '../../domain/domain.dart';
+import '../spatial/spatial_building_detail_screen.dart';
 import '../town/event_feed_panel.dart';
 import '../town/onboarding_card.dart';
 
@@ -47,6 +48,19 @@ class BuildingDetailScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(detail.name),
+        actions: [
+          IconButton(
+            key: const Key('open-cutaway'),
+            icon: const Icon(Icons.view_in_ar_outlined),
+            tooltip: 'Open cutaway',
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) =>
+                    SpatialBuildingDetailScreen(building: building),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: ListView(
