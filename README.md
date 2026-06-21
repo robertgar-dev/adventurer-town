@@ -120,13 +120,15 @@ Isar (`isar_community`) · Firebase Analytics (via non‑blocking wrapper) · Da
 Validation is tied to the commands and date below; **re‑run them after any change** rather than
 treating the figures as permanent.
 
-As of **2026-06-20**:
+Re‑verified at HEAD on **2026-06-21**:
 
 - `flutter analyze` → **No issues found.**
-- `flutter test` → an extensive test suite passing — **100+ tests across sim, spatial, and pipeline.**
 - `dart run tool/sprint02_validation_harness.dart scenario5` → **`pass: true`** (deterministic replay
   matches, zero demand backlog, Gold/Reputation never negative, upgrade levels in bounds, only
   approved MVP economy systems present).
+
+The broader `flutter test` suite — **an extensive suite of 100+ tests across sim, spatial, and
+pipeline** — is the standing coverage; re‑run it after any change.
 
 ---
 
