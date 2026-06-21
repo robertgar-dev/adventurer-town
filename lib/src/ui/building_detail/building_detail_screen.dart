@@ -48,19 +48,6 @@ class BuildingDetailScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(detail.name),
-        actions: [
-          IconButton(
-            key: const Key('open-cutaway'),
-            icon: const Icon(Icons.view_in_ar_outlined),
-            tooltip: 'Open cutaway',
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) =>
-                    SpatialBuildingDetailScreen(building: building),
-              ),
-            ),
-          ),
-        ],
       ),
       body: SafeArea(
         child: ListView(
@@ -85,6 +72,23 @@ class BuildingDetailScreen extends ConsumerWidget {
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
+            ),
+            const SizedBox(height: 16),
+            // Spatial cutaway entry — in the body (not an AppBar action, which
+            // the debug banner buries). Present on every building's detail.
+            Align(
+              alignment: Alignment.centerLeft,
+              child: FilledButton.icon(
+                key: const Key('open-cutaway'),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) =>
+                        SpatialBuildingDetailScreen(building: building),
+                  ),
+                ),
+                icon: const Icon(Icons.view_in_ar_outlined),
+                label: const Text('View Cutaway'),
+              ),
             ),
             const SizedBox(height: 16),
             _PressureCallout(
