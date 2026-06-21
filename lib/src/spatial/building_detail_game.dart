@@ -90,7 +90,11 @@ class BuildingDetailGame extends FlameGame {
 
     final slots = _slots;
     final count = math.min(occupants.length, slots.length);
-    final spriteHeight = _shellRect.height * 0.30;
+    // Detail-view render scale: FD8 (Detail_View_Render_Scale_Decision_Record_V1)
+    // locks the sprite at 22% of viewport height (~170 px on a 1280x800 Deck,
+    // ~240 px at 1080p). Shell fit is 100% of viewport height, so this fraction
+    // is the only scale lever. Live-render zoom only — masters stay 2560x2560.
+    final spriteHeight = _shellRect.height * 0.22;
 
     for (var i = 0; i < count; i++) {
       final image = await _images.load(occupants[i].baseArtPath);
