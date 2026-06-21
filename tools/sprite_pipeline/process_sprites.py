@@ -182,8 +182,12 @@ def main() -> int:
     print(f"Manifest keepers: {len(keepers)}")
 
     # --- Step A: ingest loose downloads from the input root. ---
+    # Accept png/jpg/jpeg (rembg reads either; processed output is always PNG).
+    raw_files = []
+    for ext in ("*.png", "*.jpg", "*.jpeg"):
+        raw_files.extend(inp.glob(ext))
     ingested, set_aside = [], []
-    for png in sorted(inp.glob("*.png")):
+    for png in sorted(raw_files):
         uid = file_uuid(png)
         if uid and uid in keepers:
             _char, target = keepers[uid]
