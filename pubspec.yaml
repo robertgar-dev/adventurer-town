@@ -1,5 +1,5 @@
 name: adventurer_town
-description: Sprint 01 foundation for Adventurer Town.
+description: Adventurer Town — a cozy idle/economy game in pure Flutter.
 publish_to: "none"
 version: 0.1.0+1
 
@@ -15,6 +15,8 @@ dependencies:
   isar_community: ^3.3.2
   isar_community_flutter_libs: ^3.3.2
   path_provider: ^2.1.5
+  # Spatial render surface (FD1, 2026-06-20: §IV amended to permit a game engine).
+  flame: ^1.18.0
 
 dev_dependencies:
   build_runner: ^2.4.14
@@ -25,3 +27,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/characters/
+    - assets/buildings/

@@ -1,0 +1,2 @@
+assets/characters/**/*.png filter=lfs diff=lfs merge=lfs -text
+assets/buildings/**/*.png filter=lfs diff=lfs merge=lfs -text

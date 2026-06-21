@@ -95,13 +95,17 @@ class SimulationState {
     );
   }
 
-  static const int currentSchemaVersion = 1;
+  // v2 (2026-06-20): the data model became art-aware — Adventurer gained the
+  // nullable `characterId` identity link. v1 saves remain loadable (the missing
+  // key reads as null), so the bump is a lineage marker, not a breaking change.
+  static const int currentSchemaVersion = 2;
 
   /// Schema versions this build knows how to restore. A persisted payload whose
   /// `schemaVersion` is absent or outside this set is treated as unreadable so
   /// the persistence layer can recover a safe default state instead of loading
-  /// fields it cannot interpret.
-  static const Set<int> supportedSchemaVersions = {currentSchemaVersion};
+  /// fields it cannot interpret. v1 stays supported: the only v1->v2 delta is an
+  /// additive nullable field that defaults safely.
+  static const Set<int> supportedSchemaVersions = {1, 2};
 
   static const int fixedTickIntervalSeconds =
       EconomyConstants.tickIntervalSeconds;

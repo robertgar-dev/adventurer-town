@@ -48,7 +48,10 @@ void main() {
         ),
         isTrue,
       );
-      expect(SimulationState.isSupportedSchemaVersion(2), isFalse);
+      // v1 remains supported after the v2 (art-aware) bump; v3 is unknown.
+      expect(SimulationState.isSupportedSchemaVersion(1), isTrue);
+      expect(SimulationState.isSupportedSchemaVersion(2), isTrue);
+      expect(SimulationState.isSupportedSchemaVersion(3), isFalse);
       expect(SimulationState.isSupportedSchemaVersion(0), isFalse);
       expect(SimulationState.isSupportedSchemaVersion(-1), isFalse);
       expect(SimulationState.isSupportedSchemaVersion(null), isFalse);

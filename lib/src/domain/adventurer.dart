@@ -14,6 +14,7 @@ class Adventurer {
     required this.lastServiceBuildingType,
     required this.lastOutcomeEventId,
     required this.wealthBand,
+    this.characterId,
   });
 
   factory Adventurer.create({
@@ -23,6 +24,7 @@ class Adventurer {
     required List<DemandType> preferredDemandTypes,
     required int arrivalTick,
     int wealthBand = 0,
+    String? characterId,
   }) {
     return Adventurer(
       id: id,
@@ -37,6 +39,7 @@ class Adventurer {
       lastServiceBuildingType: null,
       lastOutcomeEventId: null,
       wealthBand: wealthBand < 0 ? 0 : wealthBand,
+      characterId: characterId,
     );
   }
 
@@ -63,6 +66,8 @@ class Adventurer {
       ),
       lastOutcomeEventId: json['lastOutcomeEventId'] as String?,
       wealthBand: _nonNegativeInt(json['wealthBand']),
+      // Schema v2 (2026-06-20): art-aware identity link. Absent in v1 saves -> null.
+      characterId: json['characterId'] as String?,
     );
   }
 
@@ -79,6 +84,11 @@ class Adventurer {
   final String? lastOutcomeEventId;
   final int wealthBand;
 
+  /// Schema v2: optional link to a named cast member (`CharacterDefinition.id`).
+  /// Null when unassigned; the render layer falls back to a deterministic
+  /// mapping so every adventurer still resolves to a face.
+  final String? characterId;
+
   Adventurer copyWith({
     String? id,
     String? displayName,
@@ -92,6 +102,7 @@ class Adventurer {
     BuildingType? lastServiceBuildingType,
     String? lastOutcomeEventId,
     int? wealthBand,
+    String? characterId,
   }) {
     return Adventurer(
       id: id ?? this.id,
@@ -108,6 +119,7 @@ class Adventurer {
           lastServiceBuildingType ?? this.lastServiceBuildingType,
       lastOutcomeEventId: lastOutcomeEventId ?? this.lastOutcomeEventId,
       wealthBand: _clamp(wealthBand ?? this.wealthBand),
+      characterId: characterId ?? this.characterId,
     );
   }
 
@@ -126,6 +138,7 @@ class Adventurer {
       'lastServiceBuildingType': lastServiceBuildingType?.code,
       'lastOutcomeEventId': lastOutcomeEventId,
       'wealthBand': wealthBand,
+      'characterId': characterId,
     };
   }
 

@@ -46,3 +46,12 @@ app.*.map.json
 
 .dart_appdata/
 .dart_localappdata/
+
+# Isar native runtime library (obtain via Isar tooling, not committed)
+libisar.dll
+
+# Sprite/asset pipeline — source/work staging only. Masters are archived OUTSIDE
+# the repo (art_src/ is staging, not their permanent home). Shipped game-ready art
+# lives under assets/ and IS committed (via Git LFS).
+art_src/
+tools/sprite_pipeline/.venv/
