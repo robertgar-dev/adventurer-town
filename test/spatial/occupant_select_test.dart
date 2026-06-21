@@ -2,7 +2,6 @@ import 'package:adventurer_town/src/domain/building_art.dart';
 import 'package:adventurer_town/src/domain/enums.dart';
 import 'package:adventurer_town/src/domain/reaction.dart';
 import 'package:adventurer_town/src/spatial/building_detail_game.dart';
-import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
