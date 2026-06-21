@@ -55,3 +55,5 @@ libisar.dll
 # lives under assets/ and IS committed (via Git LFS).
 art_src/
 tools/sprite_pipeline/.venv/
+# Scratch/preview renders from the sprite pipeline (leading-underscore = throwaway)
+tools/sprite_pipeline/_*.png
