@@ -1,14 +1,37 @@
 import 'character_art.dart';
 import 'enums.dart';
 
-/// Overlay layers stacked above a character's base sprite. Reserved now for the
-/// eventual outcome / equipment overlay art (Package C); **empty in slice 1**
+/// Outcome-overlay slots stacked above a character's base sprite — the canonical
+/// **7** "Service Stamp Slots" ratified by FD9 (Slot_Registration_Decision_Record_V1
+/// D1/D2). Reserved for Package C outcome/equipment overlay art; **empty in slice 1**
 /// (no overlay art exists yet — the slots are declared, not filled).
+///
+/// FD9 D2 reconciled this enum 4 → 7: the prior `facePosture` was a stub error
+/// fusing opposite ends of the body, split here into [headFace] (top) and
+/// [feetPosture] (bottom); [shouldersCloak] and [beltHands] were added. Six of the
+/// seven are proportionally derivable from a sprite's content bbox/centroid (FD9 D3);
+/// only [weaponToolEdge] is pose-dependent and requires per-sprite annotation (D4).
 enum OverlaySlot {
-  weaponToolEdge,
+  /// Top-center of content (`bbox_top`). Derivable.
+  headFace,
+
+  /// Upper body, below head (`bbox_top + 0.12 · bbox_h`). Derivable.
+  shouldersCloak,
+
+  /// Mid-torso, at the mass centroid. Derivable.
   torsoArmor,
+
+  /// Waistline center (`bbox_top + 0.60 · bbox_h`). Derivable belt-center (D4).
+  beltHands,
+
+  /// Upper back (`bbox_top + 0.30 · bbox_h`). Derivable.
   packBack,
-  facePosture,
+
+  /// Weapon-in-hand, pose-dependent. The single annotated slot (FD9 D4).
+  weaponToolEdge,
+
+  /// Bottom-center feet anchor (0.9941, uniform across all 45). Derivable.
+  feetPosture,
 }
 
 /// A named cast member: a stable identity plus a layer-stack-ready art shape.
