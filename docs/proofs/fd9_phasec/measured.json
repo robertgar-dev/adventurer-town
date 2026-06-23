@@ -1,0 +1,819 @@
+{
+  "generated_by": "tools/fd9_phasec_proof_scratch/phasec_proof_render_test.dart (throwaway)",
+  "frame_px": 1024.0,
+  "detail_frame_h_px": 237.6,
+  "floor_frame_h_px": 176.0,
+  "mark_master": {
+    "arm_half_master_px": 84.0,
+    "stroke_master_px": 16.0,
+    "gap_master_px": 26.0,
+    "dot_r_master_px": 7.0
+  },
+  "sprites": {
+    "brindle": {
+      "role": "min (smallest visible) — FD9 fixed",
+      "bbox_h_frac": 0.6611,
+      "head_top_y": 0.333,
+      "slots": {
+        "headFace": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.49951171875,
+            "y": 0.3330078125
+          },
+          "anchor_px_floor_deck": {
+            "x": 87.9140625,
+            "y": 58.609375
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.683984375,
+            "y": 79.12265624999999
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "shouldersCloak": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.49951171875,
+            "y": 0.41234375
+          },
+          "anchor_px_floor_deck": {
+            "x": 87.9140625,
+            "y": 72.5725
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.683984375,
+            "y": 97.972875
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "packBack": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.49951171875,
+            "y": 0.53134765625
+          },
+          "anchor_px_floor_deck": {
+            "x": 87.9140625,
+            "y": 93.5171875
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.683984375,
+            "y": 126.248203125
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "torsoArmor": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.5094,
+            "y": 0.6352
+          },
+          "anchor_px_floor_deck": {
+            "x": 89.6544,
+            "y": 111.7952
+          },
+          "anchor_px_detail_1080p": {
+            "x": 121.03343999999998,
+            "y": 150.92352
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "beltHands": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.49951171875,
+            "y": 0.7296875
+          },
+          "anchor_px_floor_deck": {
+            "x": 87.9140625,
+            "y": 128.425
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.683984375,
+            "y": 173.37375
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "feetPosture": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.4995,
+            "y": 0.9941
+          },
+          "anchor_px_floor_deck": {
+            "x": 87.912,
+            "y": 174.9616
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.6812,
+            "y": 236.19816
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "weaponToolEdge": {
+          "returned": "RequiresAnnotation",
+          "note": "FD9 D4 pose-dependent; needs per-sprite annotation (none exist). Reported as a separate dependency, not a resolver failure."
+        }
+      }
+    },
+    "durnik": {
+      "role": "mid-A — MY choice (inferred selection)",
+      "bbox_h_frac": 0.707,
+      "head_top_y": 0.2871,
+      "slots": {
+        "headFace": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.50048828125,
+            "y": 0.287109375
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0859375,
+            "y": 50.53125
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.916015625,
+            "y": 68.2171875
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "shouldersCloak": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.50048828125,
+            "y": 0.371953125
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0859375,
+            "y": 65.46375
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.916015625,
+            "y": 88.3760625
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "packBack": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.50048828125,
+            "y": 0.49921875
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0859375,
+            "y": 87.8625
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.916015625,
+            "y": 118.614375
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "torsoArmor": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.505,
+            "y": 0.6158
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.88,
+            "y": 108.38080000000001
+          },
+          "anchor_px_detail_1080p": {
+            "x": 119.988,
+            "y": 146.31408
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "beltHands": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.50048828125,
+            "y": 0.711328125
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0859375,
+            "y": 125.19375
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.916015625,
+            "y": 169.0115625
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "feetPosture": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.5005,
+            "y": 0.9941
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.088,
+            "y": 174.9616
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.91879999999999,
+            "y": 236.19816
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "weaponToolEdge": {
+          "returned": "RequiresAnnotation",
+          "note": "FD9 D4 pose-dependent; needs per-sprite annotation (none exist). Reported as a separate dependency, not a resolver failure."
+        }
+      }
+    },
+    "keebo": {
+      "role": "non-human (kobold) — FD9 fixed",
+      "bbox_h_frac": 0.7725,
+      "head_top_y": 0.2217,
+      "slots": {
+        "headFace": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.5,
+            "y": 0.2216796875
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0,
+            "y": 39.015625
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.8,
+            "y": 52.67109375
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "shouldersCloak": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.5,
+            "y": 0.314375
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0,
+            "y": 55.330000000000005
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.8,
+            "y": 74.6955
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "packBack": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.5,
+            "y": 0.45341796874999996
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0,
+            "y": 79.80156249999999
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.8,
+            "y": 107.732109375
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "torsoArmor": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.4992,
+            "y": 0.6031
+          },
+          "anchor_px_floor_deck": {
+            "x": 87.8592,
+            "y": 106.1456
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.60991999999999,
+            "y": 143.29656
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "beltHands": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.5,
+            "y": 0.6851562499999999
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0,
+            "y": 120.58749999999998
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.8,
+            "y": 162.79312499999997
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "feetPosture": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.5,
+            "y": 0.9941
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0,
+            "y": 174.9616
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.8,
+            "y": 236.19816
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "weaponToolEdge": {
+          "returned": "RequiresAnnotation",
+          "note": "FD9 D4 pose-dependent; needs per-sprite annotation (none exist). Reported as a separate dependency, not a resolver failure."
+        }
+      }
+    },
+    "nym": {
+      "role": "mid-B — MY choice (inferred selection)",
+      "bbox_h_frac": 0.8037,
+      "head_top_y": 0.1904,
+      "slots": {
+        "headFace": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.49853515625,
+            "y": 0.1904296875
+          },
+          "anchor_px_floor_deck": {
+            "x": 87.7421875,
+            "y": 33.515625
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.451953125,
+            "y": 45.24609375
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "shouldersCloak": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.49853515625,
+            "y": 0.286875
+          },
+          "anchor_px_floor_deck": {
+            "x": 87.7421875,
+            "y": 50.489999999999995
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.451953125,
+            "y": 68.16149999999999
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "packBack": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.49853515625,
+            "y": 0.43154296875
+          },
+          "anchor_px_floor_deck": {
+            "x": 87.7421875,
+            "y": 75.9515625
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.451953125,
+            "y": 102.53460937499999
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "torsoArmor": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.494,
+            "y": 0.6043
+          },
+          "anchor_px_floor_deck": {
+            "x": 86.944,
+            "y": 106.35679999999999
+          },
+          "anchor_px_detail_1080p": {
+            "x": 117.3744,
+            "y": 143.58167999999998
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "beltHands": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.49853515625,
+            "y": 0.67265625
+          },
+          "anchor_px_floor_deck": {
+            "x": 87.7421875,
+            "y": 118.38749999999999
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.451953125,
+            "y": 159.82312499999998
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "feetPosture": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.4985,
+            "y": 0.9941
+          },
+          "anchor_px_floor_deck": {
+            "x": 87.736,
+            "y": 174.9616
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.4436,
+            "y": 236.19816
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "weaponToolEdge": {
+          "returned": "RequiresAnnotation",
+          "note": "FD9 D4 pose-dependent; needs per-sprite annotation (none exist). Reported as a separate dependency, not a resolver failure."
+        }
+      }
+    },
+    "borrin": {
+      "role": "max (tallest) — FD9 fixed",
+      "bbox_h_frac": 0.8984,
+      "head_top_y": 0.0957,
+      "slots": {
+        "headFace": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.5,
+            "y": 0.095703125
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0,
+            "y": 16.84375
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.8,
+            "y": 22.7390625
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "shouldersCloak": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.5,
+            "y": 0.20351562499999998
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0,
+            "y": 35.818749999999994
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.8,
+            "y": 48.3553125
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "packBack": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.5,
+            "y": 0.365234375
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0,
+            "y": 64.28125
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.8,
+            "y": 86.7796875
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "torsoArmor": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.5467,
+            "y": 0.553
+          },
+          "anchor_px_floor_deck": {
+            "x": 96.2192,
+            "y": 97.328
+          },
+          "anchor_px_detail_1080p": {
+            "x": 129.89592,
+            "y": 131.3928
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "beltHands": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.5,
+            "y": 0.634765625
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0,
+            "y": 111.71875
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.8,
+            "y": 150.8203125
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "feetPosture": {
+          "returned": "DerivedAnchor",
+          "anchor_frac": {
+            "x": 0.5,
+            "y": 0.9941
+          },
+          "anchor_px_floor_deck": {
+            "x": 88.0,
+            "y": 174.9616
+          },
+          "anchor_px_detail_1080p": {
+            "x": 118.8,
+            "y": 236.19816
+          },
+          "inside_content_bbox": true,
+          "mark_floor_px": {
+            "crosshair_extent": 28.875,
+            "stroke_w": 2.75,
+            "dot_d": 2.40625
+          },
+          "mark_detail_px": {
+            "crosshair_extent": 38.981249999999996,
+            "stroke_w": 3.7125
+          }
+        },
+        "weaponToolEdge": {
+          "returned": "RequiresAnnotation",
+          "note": "FD9 D4 pose-dependent; needs per-sprite annotation (none exist). Reported as a separate dependency, not a resolver failure."
+        }
+      }
+    }
+  }
+}
