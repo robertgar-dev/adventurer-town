@@ -1,0 +1,1540 @@
+{
+  "meta": {
+    "seedStart": 1001,
+    "seedCount": 40,
+    "horizonTicks": 1440,
+    "tickIntervalSeconds": 5,
+    "horizonHours": 2.0
+  },
+  "scenarios": {
+    "baseline": {
+      "totalAdventurers": 172800,
+      "overallServedRate": 0.7503703703703704,
+      "distinctFacesSeen": 45,
+      "betweenFace": {
+        "observedServedRateStdAcrossFaces": 0.007380665421544602,
+        "nullMean": 0.006906835852459775,
+        "null95": [
+          0.005402647994850434,
+          0.008516877253943525
+        ],
+        "observedWithinNullBand": true
+      },
+      "servedRateByTier": {
+        "novice": {
+          "served": 129664,
+          "total": 172800,
+          "rate": 0.7503703703703704
+        }
+      },
+      "servedRateByWealthBand": {
+        "0": {
+          "served": 43283,
+          "total": 57600,
+          "rate": 0.7514409722222222
+        },
+        "1": {
+          "served": 43228,
+          "total": 57600,
+          "rate": 0.7504861111111111
+        },
+        "2": {
+          "served": 43153,
+          "total": 57600,
+          "rate": 0.7491840277777778
+        }
+      },
+      "withinFace": {
+        "brindle": {
+          "seedsWithAppearances": 40,
+          "servedRateMean": 0.7554646246834557,
+          "servedRateStdAcrossSeeds": 0.04273556938844411,
+          "distinctOneTickLifeTypes": 4
+        },
+        "borrin": {
+          "seedsWithAppearances": 40,
+          "servedRateMean": 0.7359537846575016,
+          "servedRateStdAcrossSeeds": 0.035902512079162556,
+          "distinctOneTickLifeTypes": 4
+        },
+        "keebo": {
+          "seedsWithAppearances": 40,
+          "servedRateMean": 0.7458563320709689,
+          "servedRateStdAcrossSeeds": 0.03691733331969854,
+          "distinctOneTickLifeTypes": 4
+        },
+        "durnik": {
+          "seedsWithAppearances": 40,
+          "servedRateMean": 0.7578934393874065,
+          "servedRateStdAcrossSeeds": 0.043351140550796946,
+          "distinctOneTickLifeTypes": 4
+        },
+        "nym": {
+          "seedsWithAppearances": 40,
+          "servedRateMean": 0.7610890944035065,
+          "servedRateStdAcrossSeeds": 0.03833364919662628,
+          "distinctOneTickLifeTypes": 4
+        },
+        "thane": {
+          "seedsWithAppearances": 40,
+          "servedRateMean": 0.7566265409576085,
+          "servedRateStdAcrossSeeds": 0.03539447985339157,
+          "distinctOneTickLifeTypes": 4
+        }
+      },
+      "perFace": {
+        "anwen": {
+          "name": "Anwen Starling",
+          "total": 3898,
+          "served": 2932,
+          "servedRate": 0.7521806054386865,
+          "demandMix": {
+            "food": 1979,
+            "rest": 1919
+          },
+          "tierMix": {
+            "novice": 3898
+          }
+        },
+        "armand": {
+          "name": "Ser Armand Lowfield",
+          "total": 3838,
+          "served": 2838,
+          "servedRate": 0.7394476289734236,
+          "demandMix": {
+            "food": 1924,
+            "rest": 1914
+          },
+          "tierMix": {
+            "novice": 3838
+          }
+        },
+        "asha": {
+          "name": "Asha Brightcoin",
+          "total": 3816,
+          "served": 2877,
+          "servedRate": 0.7539308176100629,
+          "demandMix": {
+            "rest": 1913,
+            "food": 1903
+          },
+          "tierMix": {
+            "novice": 3816
+          }
+        },
+        "bessa": {
+          "name": "Bessa",
+          "total": 3794,
+          "served": 2873,
+          "servedRate": 0.757248286768582,
+          "demandMix": {
+            "rest": 1956,
+            "food": 1838
+          },
+          "tierMix": {
+            "novice": 3794
+          }
+        },
+        "borrin": {
+          "name": "Borrin Chapelback",
+          "total": 3759,
+          "served": 2765,
+          "servedRate": 0.7355679702048417,
+          "demandMix": {
+            "food": 1907,
+            "rest": 1852
+          },
+          "tierMix": {
+            "novice": 3759
+          }
+        },
+        "bren": {
+          "name": "Bren Ashboot",
+          "total": 3758,
+          "served": 2817,
+          "servedRate": 0.7496008515167643,
+          "demandMix": {
+            "rest": 1860,
+            "food": 1898
+          },
+          "tierMix": {
+            "novice": 3758
+          }
+        },
+        "brindle": {
+          "name": "Brindle Mosscap",
+          "total": 3764,
+          "served": 2840,
+          "servedRate": 0.7545164718384697,
+          "demandMix": {
+            "food": 1872,
+            "rest": 1892
+          },
+          "tierMix": {
+            "novice": 3764
+          }
+        },
+        "caldus": {
+          "name": "Caldus Vey",
+          "total": 3773,
+          "served": 2793,
+          "servedRate": 0.7402597402597403,
+          "demandMix": {
+            "food": 1875,
+            "rest": 1898
+          },
+          "tierMix": {
+            "novice": 3773
+          }
+        },
+        "cricket": {
+          "name": "Cricket Lowbell",
+          "total": 3819,
+          "served": 2853,
+          "servedRate": 0.7470542026708562,
+          "demandMix": {
+            "food": 1897,
+            "rest": 1922
+          },
+          "tierMix": {
+            "novice": 3819
+          }
+        },
+        "della": {
+          "name": "Della Truepin",
+          "total": 3846,
+          "served": 2903,
+          "servedRate": 0.7548101924076963,
+          "demandMix": {
+            "food": 1911,
+            "rest": 1935
+          },
+          "tierMix": {
+            "novice": 3846
+          }
+        },
+        "durnik": {
+          "name": "Durnik Saltbeard",
+          "total": 3884,
+          "served": 2940,
+          "servedRate": 0.756951596292482,
+          "demandMix": {
+            "food": 1898,
+            "rest": 1986
+          },
+          "tierMix": {
+            "novice": 3884
+          }
+        },
+        "elowen": {
+          "name": "Elowen",
+          "total": 3911,
+          "served": 2906,
+          "servedRate": 0.7430324725134236,
+          "demandMix": {
+            "food": 1950,
+            "rest": 1961
+          },
+          "tierMix": {
+            "novice": 3911
+          }
+        },
+        "fenwick": {
+          "name": "Fenwick Grays",
+          "total": 3922,
+          "served": 2930,
+          "servedRate": 0.7470678225395206,
+          "demandMix": {
+            "food": 1997,
+            "rest": 1925
+          },
+          "tierMix": {
+            "novice": 3922
+          }
+        },
+        "halra": {
+          "name": "Halra Greenwake",
+          "total": 3928,
+          "served": 2977,
+          "servedRate": 0.7578920570264766,
+          "demandMix": {
+            "rest": 1978,
+            "food": 1950
+          },
+          "tierMix": {
+            "novice": 3928
+          }
+        },
+        "harp": {
+          "name": "Harp Vey",
+          "total": 3901,
+          "served": 2907,
+          "servedRate": 0.7451935401179185,
+          "demandMix": {
+            "food": 1973,
+            "rest": 1928
+          },
+          "tierMix": {
+            "novice": 3901
+          }
+        },
+        "ilyra": {
+          "name": "Ilyra Moonstep",
+          "total": 3877,
+          "served": 2877,
+          "servedRate": 0.7420686097498066,
+          "demandMix": {
+            "rest": 1954,
+            "food": 1923
+          },
+          "tierMix": {
+            "novice": 3877
+          }
+        },
+        "isolde": {
+          "name": "Isolde Fenrice",
+          "total": 3863,
+          "served": 2894,
+          "servedRate": 0.7491586849598757,
+          "demandMix": {
+            "food": 1926,
+            "rest": 1937
+          },
+          "tierMix": {
+            "novice": 3863
+          }
+        },
+        "jessa": {
+          "name": "Jessa Briarheel",
+          "total": 3806,
+          "served": 2858,
+          "servedRate": 0.7509196006305833,
+          "demandMix": {
+            "rest": 1843,
+            "food": 1963
+          },
+          "tierMix": {
+            "novice": 3806
+          }
+        },
+        "keebo": {
+          "name": "Keebo Clatterpin",
+          "total": 3779,
+          "served": 2820,
+          "servedRate": 0.7462291611537444,
+          "demandMix": {
+            "food": 1884,
+            "rest": 1895
+          },
+          "tierMix": {
+            "novice": 3779
+          }
+        },
+        "korrin": {
+          "name": "Korrin",
+          "total": 3770,
+          "served": 2864,
+          "servedRate": 0.7596816976127321,
+          "demandMix": {
+            "rest": 1893,
+            "food": 1877
+          },
+          "tierMix": {
+            "novice": 3770
+          }
+        },
+        "lethren": {
+          "name": "Lethren of the Blue Road",
+          "total": 3751,
+          "served": 2859,
+          "servedRate": 0.7621967475339909,
+          "demandMix": {
+            "food": 1887,
+            "rest": 1864
+          },
+          "tierMix": {
+            "novice": 3751
+          }
+        },
+        "maelis": {
+          "name": "Maelis Sunreed",
+          "total": 3767,
+          "served": 2777,
+          "servedRate": 0.7371913989912398,
+          "demandMix": {
+            "food": 1937,
+            "rest": 1830
+          },
+          "tierMix": {
+            "novice": 3767
+          }
+        },
+        "mara": {
+          "name": "Mara",
+          "total": 3786,
+          "served": 2833,
+          "servedRate": 0.748283148441627,
+          "demandMix": {
+            "rest": 1884,
+            "food": 1902
+          },
+          "tierMix": {
+            "novice": 3786
+          }
+        },
+        "mink": {
+          "name": "Mink Bottlecap",
+          "total": 3810,
+          "served": 2906,
+          "servedRate": 0.7627296587926509,
+          "demandMix": {
+            "rest": 1892,
+            "food": 1918
+          },
+          "tierMix": {
+            "novice": 3810
+          }
+        },
+        "mirelle": {
+          "name": "Mirelle Crowglass",
+          "total": 3849,
+          "served": 2894,
+          "servedRate": 0.7518836061314628,
+          "demandMix": {
+            "rest": 1925,
+            "food": 1924
+          },
+          "tierMix": {
+            "novice": 3849
+          }
+        },
+        "mothervarr": {
+          "name": "Mother Varr",
+          "total": 3876,
+          "served": 2915,
+          "servedRate": 0.7520639834881321,
+          "demandMix": {
+            "rest": 1925,
+            "food": 1951
+          },
+          "tierMix": {
+            "novice": 3876
+          }
+        },
+        "nym": {
+          "name": "Nym",
+          "total": 3911,
+          "served": 2977,
+          "servedRate": 0.7611863973408336,
+          "demandMix": {
+            "food": 1908,
+            "rest": 2003
+          },
+          "tierMix": {
+            "novice": 3911
+          }
+        },
+        "oren": {
+          "name": "Oren",
+          "total": 3919,
+          "served": 2938,
+          "servedRate": 0.7496810410819087,
+          "demandMix": {
+            "rest": 1924,
+            "food": 1995
+          },
+          "tierMix": {
+            "novice": 3919
+          }
+        },
+        "orla": {
+          "name": "Orla Mourn",
+          "total": 3924,
+          "served": 2925,
+          "servedRate": 0.7454128440366973,
+          "demandMix": {
+            "rest": 2011,
+            "food": 1913
+          },
+          "tierMix": {
+            "novice": 3924
+          }
+        },
+        "pip": {
+          "name": "Pip Glimmerlock",
+          "total": 3917,
+          "served": 2929,
+          "servedRate": 0.7477661475619096,
+          "demandMix": {
+            "rest": 1992,
+            "food": 1925
+          },
+          "tierMix": {
+            "novice": 3917
+          }
+        },
+        "quorra": {
+          "name": "Quorra Brightscale",
+          "total": 3873,
+          "served": 2890,
+          "servedRate": 0.7461915827523883,
+          "demandMix": {
+            "rest": 1926,
+            "food": 1947
+          },
+          "tierMix": {
+            "novice": 3873
+          }
+        },
+        "ralgar": {
+          "name": "Ralgar One-Mitt",
+          "total": 3848,
+          "served": 2852,
+          "servedRate": 0.7411642411642412,
+          "demandMix": {
+            "food": 1941,
+            "rest": 1907
+          },
+          "tierMix": {
+            "novice": 3848
+          }
+        },
+        "renn": {
+          "name": "Old Renn Tallow",
+          "total": 3826,
+          "served": 2869,
+          "servedRate": 0.7498693152117094,
+          "demandMix": {
+            "rest": 1896,
+            "food": 1930
+          },
+          "tierMix": {
+            "novice": 3826
+          }
+        },
+        "rook": {
+          "name": "Rook",
+          "total": 3778,
+          "served": 2811,
+          "servedRate": 0.7440444679724723,
+          "demandMix": {
+            "food": 1887,
+            "rest": 1891
+          },
+          "tierMix": {
+            "novice": 3778
+          }
+        },
+        "saela": {
+          "name": "Saela Thornmere",
+          "total": 3761,
+          "served": 2852,
+          "servedRate": 0.7583089603828769,
+          "demandMix": {
+            "rest": 1867,
+            "food": 1894
+          },
+          "tierMix": {
+            "novice": 3761
+          }
+        },
+        "sera": {
+          "name": "Sera",
+          "total": 3760,
+          "served": 2806,
+          "servedRate": 0.7462765957446809,
+          "demandMix": {
+            "rest": 1882,
+            "food": 1878
+          },
+          "tierMix": {
+            "novice": 3760
+          }
+        },
+        "shavarra": {
+          "name": "Shavarra Duskwell",
+          "total": 3756,
+          "served": 2779,
+          "servedRate": 0.7398828541001065,
+          "demandMix": {
+            "food": 1896,
+            "rest": 1860
+          },
+          "tierMix": {
+            "novice": 3756
+          }
+        },
+        "silt": {
+          "name": "Silt of Three Roads",
+          "total": 3789,
+          "served": 2890,
+          "servedRate": 0.7627342306677224,
+          "demandMix": {
+            "rest": 1926,
+            "food": 1863
+          },
+          "tierMix": {
+            "novice": 3789
+          }
+        },
+        "syl": {
+          "name": "Syl Nighthollow",
+          "total": 3811,
+          "served": 2906,
+          "servedRate": 0.7625295198110732,
+          "demandMix": {
+            "food": 1903,
+            "rest": 1908
+          },
+          "tierMix": {
+            "novice": 3811
+          }
+        },
+        "tavi": {
+          "name": "Tavi",
+          "total": 3851,
+          "served": 2926,
+          "servedRate": 0.759802648662685,
+          "demandMix": {
+            "rest": 1951,
+            "food": 1900
+          },
+          "tierMix": {
+            "novice": 3851
+          }
+        },
+        "thane": {
+          "name": "Thane Grudgebell",
+          "total": 3885,
+          "served": 2941,
+          "servedRate": 0.757014157014157,
+          "demandMix": {
+            "rest": 1963,
+            "food": 1922
+          },
+          "tierMix": {
+            "novice": 3885
+          }
+        },
+        "torv": {
+          "name": "Torv Emberjaw",
+          "total": 3902,
+          "served": 2893,
+          "servedRate": 0.7414146591491543,
+          "demandMix": {
+            "rest": 1957,
+            "food": 1945
+          },
+          "tierMix": {
+            "novice": 3902
+          }
+        },
+        "vaelor": {
+          "name": "Vaelor Brass-Scale",
+          "total": 3926,
+          "served": 2933,
+          "servedRate": 0.7470708099847173,
+          "demandMix": {
+            "food": 1944,
+            "rest": 1982
+          },
+          "tierMix": {
+            "novice": 3926
+          }
+        },
+        "vellum": {
+          "name": "Vellum Quince",
+          "total": 3916,
+          "served": 2966,
+          "servedRate": 0.7574055158324822,
+          "demandMix": {
+            "rest": 1942,
+            "food": 1974
+          },
+          "tierMix": {
+            "novice": 3916
+          }
+        },
+        "ysabet": {
+          "name": "Ysabet Crowglass",
+          "total": 3902,
+          "served": 2933,
+          "servedRate": 0.7516658124038954,
+          "demandMix": {
+            "rest": 1953,
+            "food": 1949
+          },
+          "tierMix": {
+            "novice": 3902
+          }
+        }
+      }
+    },
+    "fullyBuilt": {
+      "totalAdventurers": 172808,
+      "overallServedRate": 0.857761214758576,
+      "distinctFacesSeen": 45,
+      "betweenFace": {
+        "observedServedRateStdAcrossFaces": 0.003105729316054036,
+        "nullMean": 0.005496056550465975,
+        "null95": [
+          0.004540355307661624,
+          0.0066460356239606555
+        ],
+        "observedWithinNullBand": false
+      },
+      "servedRateByTier": {
+        "novice": {
+          "served": 148173,
+          "total": 172740,
+          "rate": 0.8577804793331018
+        },
+        "veteran": {
+          "served": 32,
+          "total": 37,
+          "rate": 0.8648648648648649
+        },
+        "legendary": {
+          "served": 10,
+          "total": 16,
+          "rate": 0.625
+        },
+        "elite": {
+          "served": 13,
+          "total": 15,
+          "rate": 0.8666666666666667
+        }
+      },
+      "servedRateByWealthBand": {
+        "0": {
+          "served": 49360,
+          "total": 57605,
+          "rate": 0.8568700633625553
+        },
+        "1": {
+          "served": 49572,
+          "total": 57602,
+          "rate": 0.8605951182250616
+        },
+        "2": {
+          "served": 49296,
+          "total": 57601,
+          "rate": 0.8558184753736914
+        }
+      },
+      "withinFace": {
+        "brindle": {
+          "seedsWithAppearances": 40,
+          "servedRateMean": 0.8609492790324929,
+          "servedRateStdAcrossSeeds": 0.029748662762022034,
+          "distinctOneTickLifeTypes": 10
+        },
+        "borrin": {
+          "seedsWithAppearances": 40,
+          "servedRateMean": 0.8556546573799398,
+          "servedRateStdAcrossSeeds": 0.02673327085855363,
+          "distinctOneTickLifeTypes": 10
+        },
+        "keebo": {
+          "seedsWithAppearances": 40,
+          "servedRateMean": 0.858634207298025,
+          "servedRateStdAcrossSeeds": 0.03692193983066974,
+          "distinctOneTickLifeTypes": 10
+        },
+        "durnik": {
+          "seedsWithAppearances": 40,
+          "servedRateMean": 0.8551709219750636,
+          "servedRateStdAcrossSeeds": 0.04032706067942322,
+          "distinctOneTickLifeTypes": 10
+        },
+        "nym": {
+          "seedsWithAppearances": 40,
+          "servedRateMean": 0.8565081665102114,
+          "servedRateStdAcrossSeeds": 0.033772508093209475,
+          "distinctOneTickLifeTypes": 10
+        },
+        "thane": {
+          "seedsWithAppearances": 40,
+          "servedRateMean": 0.8583666193601471,
+          "servedRateStdAcrossSeeds": 0.02967223341926512,
+          "distinctOneTickLifeTypes": 10
+        }
+      },
+      "perFace": {
+        "anwen": {
+          "name": "Anwen Starling",
+          "total": 3898,
+          "served": 3326,
+          "servedRate": 0.8532580810672139,
+          "demandMix": {
+            "food": 1153,
+            "rest": 1200,
+            "supplies": 614,
+            "gear": 546,
+            "healing": 385
+          },
+          "tierMix": {
+            "novice": 3898
+          }
+        },
+        "armand": {
+          "name": "Ser Armand Lowfield",
+          "total": 3838,
+          "served": 3275,
+          "servedRate": 0.8533090151120375,
+          "demandMix": {
+            "food": 1138,
+            "rest": 1129,
+            "supplies": 569,
+            "gear": 605,
+            "healing": 397
+          },
+          "tierMix": {
+            "novice": 3838
+          }
+        },
+        "asha": {
+          "name": "Asha Brightcoin",
+          "total": 3816,
+          "served": 3285,
+          "servedRate": 0.8608490566037735,
+          "demandMix": {
+            "rest": 1142,
+            "supplies": 557,
+            "healing": 388,
+            "gear": 613,
+            "food": 1116
+          },
+          "tierMix": {
+            "novice": 3815,
+            "elite": 1
+          }
+        },
+        "bessa": {
+          "name": "Bessa",
+          "total": 3794,
+          "served": 3240,
+          "servedRate": 0.8539799683711122,
+          "demandMix": {
+            "rest": 1117,
+            "healing": 393,
+            "food": 1163,
+            "supplies": 583,
+            "gear": 538
+          },
+          "tierMix": {
+            "novice": 3793,
+            "legendary": 1
+          }
+        },
+        "borrin": {
+          "name": "Borrin Chapelback",
+          "total": 3760,
+          "served": 3217,
+          "servedRate": 0.8555851063829787,
+          "demandMix": {
+            "food": 1112,
+            "rest": 1097,
+            "supplies": 581,
+            "healing": 385,
+            "gear": 585
+          },
+          "tierMix": {
+            "novice": 3759,
+            "legendary": 1
+          }
+        },
+        "bren": {
+          "name": "Bren Ashboot",
+          "total": 3758,
+          "served": 3217,
+          "servedRate": 0.8560404470463012,
+          "demandMix": {
+            "rest": 1165,
+            "food": 1130,
+            "supplies": 553,
+            "gear": 547,
+            "healing": 363
+          },
+          "tierMix": {
+            "novice": 3757,
+            "veteran": 1
+          }
+        },
+        "brindle": {
+          "name": "Brindle Mosscap",
+          "total": 3764,
+          "served": 3240,
+          "servedRate": 0.8607863974495218,
+          "demandMix": {
+            "food": 1114,
+            "supplies": 587,
+            "gear": 594,
+            "healing": 396,
+            "rest": 1073
+          },
+          "tierMix": {
+            "novice": 3763,
+            "elite": 1
+          }
+        },
+        "caldus": {
+          "name": "Caldus Vey",
+          "total": 3773,
+          "served": 3244,
+          "servedRate": 0.8597932679565332,
+          "demandMix": {
+            "gear": 527,
+            "food": 1139,
+            "rest": 1150,
+            "healing": 366,
+            "supplies": 591
+          },
+          "tierMix": {
+            "novice": 3770,
+            "veteran": 2,
+            "elite": 1
+          }
+        },
+        "cricket": {
+          "name": "Cricket Lowbell",
+          "total": 3819,
+          "served": 3301,
+          "servedRate": 0.8643623985336476,
+          "demandMix": {
+            "rest": 1138,
+            "food": 1129,
+            "supplies": 585,
+            "gear": 597,
+            "healing": 370
+          },
+          "tierMix": {
+            "novice": 3818,
+            "elite": 1
+          }
+        },
+        "della": {
+          "name": "Della Truepin",
+          "total": 3846,
+          "served": 3298,
+          "servedRate": 0.8575143005720229,
+          "demandMix": {
+            "healing": 401,
+            "food": 1119,
+            "rest": 1168,
+            "gear": 584,
+            "supplies": 574
+          },
+          "tierMix": {
+            "novice": 3845,
+            "elite": 1
+          }
+        },
+        "durnik": {
+          "name": "Durnik Saltbeard",
+          "total": 3884,
+          "served": 3322,
+          "servedRate": 0.8553038105046344,
+          "demandMix": {
+            "food": 1179,
+            "rest": 1157,
+            "healing": 352,
+            "gear": 600,
+            "supplies": 596
+          },
+          "tierMix": {
+            "novice": 3881,
+            "veteran": 2,
+            "legendary": 1
+          }
+        },
+        "elowen": {
+          "name": "Elowen",
+          "total": 3912,
+          "served": 3351,
+          "servedRate": 0.8565950920245399,
+          "demandMix": {
+            "food": 1160,
+            "rest": 1210,
+            "gear": 570,
+            "supplies": 572,
+            "healing": 400
+          },
+          "tierMix": {
+            "novice": 3909,
+            "veteran": 1,
+            "legendary": 2
+          }
+        },
+        "fenwick": {
+          "name": "Fenwick Grays",
+          "total": 3923,
+          "served": 3370,
+          "servedRate": 0.8590364516951313,
+          "demandMix": {
+            "rest": 1180,
+            "food": 1160,
+            "supplies": 589,
+            "healing": 391,
+            "gear": 603
+          },
+          "tierMix": {
+            "novice": 3919,
+            "veteran": 3,
+            "legendary": 1
+          }
+        },
+        "halra": {
+          "name": "Halra Greenwake",
+          "total": 3928,
+          "served": 3380,
+          "servedRate": 0.860488798370672,
+          "demandMix": {
+            "gear": 592,
+            "rest": 1180,
+            "food": 1210,
+            "healing": 387,
+            "supplies": 559
+          },
+          "tierMix": {
+            "novice": 3927,
+            "elite": 1
+          }
+        },
+        "harp": {
+          "name": "Harp Vey",
+          "total": 3901,
+          "served": 3344,
+          "servedRate": 0.8572160984362984,
+          "demandMix": {
+            "supplies": 592,
+            "rest": 1194,
+            "food": 1130,
+            "gear": 588,
+            "healing": 397
+          },
+          "tierMix": {
+            "novice": 3899,
+            "veteran": 1,
+            "elite": 1
+          }
+        },
+        "ilyra": {
+          "name": "Ilyra Moonstep",
+          "total": 3877,
+          "served": 3335,
+          "servedRate": 0.8602011864843951,
+          "demandMix": {
+            "supplies": 547,
+            "rest": 1179,
+            "gear": 597,
+            "food": 1150,
+            "healing": 404
+          },
+          "tierMix": {
+            "novice": 3876,
+            "veteran": 1
+          }
+        },
+        "isolde": {
+          "name": "Isolde Fenrice",
+          "total": 3863,
+          "served": 3323,
+          "servedRate": 0.8602122702562776,
+          "demandMix": {
+            "food": 1123,
+            "rest": 1156,
+            "supplies": 609,
+            "gear": 592,
+            "healing": 383
+          },
+          "tierMix": {
+            "novice": 3860,
+            "veteran": 3
+          }
+        },
+        "jessa": {
+          "name": "Jessa Briarheel",
+          "total": 3806,
+          "served": 3253,
+          "servedRate": 0.8547031003678403,
+          "demandMix": {
+            "supplies": 551,
+            "rest": 1179,
+            "gear": 568,
+            "food": 1142,
+            "healing": 366
+          },
+          "tierMix": {
+            "novice": 3805,
+            "veteran": 1
+          }
+        },
+        "keebo": {
+          "name": "Keebo Clatterpin",
+          "total": 3779,
+          "served": 3242,
+          "servedRate": 0.8578989150568933,
+          "demandMix": {
+            "rest": 1124,
+            "food": 1154,
+            "gear": 578,
+            "supplies": 582,
+            "healing": 341
+          },
+          "tierMix": {
+            "novice": 3777,
+            "veteran": 2
+          }
+        },
+        "korrin": {
+          "name": "Korrin",
+          "total": 3770,
+          "served": 3215,
+          "servedRate": 0.8527851458885941,
+          "demandMix": {
+            "food": 1100,
+            "gear": 549,
+            "rest": 1176,
+            "supplies": 565,
+            "healing": 380
+          },
+          "tierMix": {
+            "novice": 3768,
+            "legendary": 1,
+            "veteran": 1
+          }
+        },
+        "lethren": {
+          "name": "Lethren of the Blue Road",
+          "total": 3752,
+          "served": 3237,
+          "servedRate": 0.8627398720682303,
+          "demandMix": {
+            "supplies": 549,
+            "food": 1151,
+            "healing": 405,
+            "gear": 561,
+            "rest": 1086
+          },
+          "tierMix": {
+            "novice": 3750,
+            "legendary": 1,
+            "veteran": 1
+          }
+        },
+        "maelis": {
+          "name": "Maelis Sunreed",
+          "total": 3767,
+          "served": 3223,
+          "servedRate": 0.855588001061853,
+          "demandMix": {
+            "food": 1114,
+            "rest": 1117,
+            "supplies": 584,
+            "healing": 383,
+            "gear": 569
+          },
+          "tierMix": {
+            "novice": 3767
+          }
+        },
+        "mara": {
+          "name": "Mara",
+          "total": 3786,
+          "served": 3234,
+          "servedRate": 0.8541996830427893,
+          "demandMix": {
+            "food": 1129,
+            "healing": 409,
+            "rest": 1126,
+            "gear": 559,
+            "supplies": 563
+          },
+          "tierMix": {
+            "novice": 3785,
+            "veteran": 1
+          }
+        },
+        "mink": {
+          "name": "Mink Bottlecap",
+          "total": 3810,
+          "served": 3277,
+          "servedRate": 0.8601049868766404,
+          "demandMix": {
+            "gear": 559,
+            "rest": 1137,
+            "food": 1128,
+            "supplies": 616,
+            "healing": 370
+          },
+          "tierMix": {
+            "novice": 3808,
+            "veteran": 2
+          }
+        },
+        "mirelle": {
+          "name": "Mirelle Crowglass",
+          "total": 3849,
+          "served": 3296,
+          "servedRate": 0.856326318524292,
+          "demandMix": {
+            "food": 1157,
+            "supplies": 534,
+            "healing": 409,
+            "rest": 1164,
+            "gear": 585
+          },
+          "tierMix": {
+            "novice": 3849
+          }
+        },
+        "mothervarr": {
+          "name": "Mother Varr",
+          "total": 3876,
+          "served": 3327,
+          "servedRate": 0.858359133126935,
+          "demandMix": {
+            "supplies": 619,
+            "food": 1160,
+            "rest": 1146,
+            "healing": 381,
+            "gear": 570
+          },
+          "tierMix": {
+            "novice": 3875,
+            "veteran": 1
+          }
+        },
+        "nym": {
+          "name": "Nym",
+          "total": 3911,
+          "served": 3350,
+          "servedRate": 0.8565584249552544,
+          "demandMix": {
+            "supplies": 579,
+            "gear": 570,
+            "food": 1189,
+            "rest": 1176,
+            "healing": 397
+          },
+          "tierMix": {
+            "novice": 3909,
+            "veteran": 2
+          }
+        },
+        "oren": {
+          "name": "Oren",
+          "total": 3919,
+          "served": 3362,
+          "servedRate": 0.8578719060984945,
+          "demandMix": {
+            "rest": 1183,
+            "food": 1216,
+            "supplies": 545,
+            "gear": 581,
+            "healing": 394
+          },
+          "tierMix": {
+            "novice": 3917,
+            "veteran": 1,
+            "elite": 1
+          }
+        },
+        "orla": {
+          "name": "Orla Mourn",
+          "total": 3924,
+          "served": 3363,
+          "servedRate": 0.8570336391437309,
+          "demandMix": {
+            "gear": 607,
+            "food": 1180,
+            "healing": 398,
+            "rest": 1183,
+            "supplies": 556
+          },
+          "tierMix": {
+            "novice": 3922,
+            "veteran": 2
+          }
+        },
+        "pip": {
+          "name": "Pip Glimmerlock",
+          "total": 3917,
+          "served": 3359,
+          "servedRate": 0.857544038805208,
+          "demandMix": {
+            "gear": 592,
+            "healing": 366,
+            "supplies": 624,
+            "rest": 1136,
+            "food": 1199
+          },
+          "tierMix": {
+            "novice": 3916,
+            "veteran": 1
+          }
+        },
+        "quorra": {
+          "name": "Quorra Brightscale",
+          "total": 3873,
+          "served": 3307,
+          "servedRate": 0.8538600568035115,
+          "demandMix": {
+            "rest": 1182,
+            "supplies": 555,
+            "food": 1151,
+            "healing": 403,
+            "gear": 582
+          },
+          "tierMix": {
+            "novice": 3872,
+            "legendary": 1
+          }
+        },
+        "ralgar": {
+          "name": "Ralgar One-Mitt",
+          "total": 3849,
+          "served": 3286,
+          "servedRate": 0.8537282411015849,
+          "demandMix": {
+            "food": 1125,
+            "gear": 602,
+            "rest": 1181,
+            "healing": 357,
+            "supplies": 584
+          },
+          "tierMix": {
+            "novice": 3847,
+            "legendary": 1,
+            "elite": 1
+          }
+        },
+        "renn": {
+          "name": "Old Renn Tallow",
+          "total": 3826,
+          "served": 3285,
+          "servedRate": 0.8585990590695243,
+          "demandMix": {
+            "food": 1188,
+            "gear": 558,
+            "rest": 1111,
+            "healing": 385,
+            "supplies": 584
+          },
+          "tierMix": {
+            "novice": 3825,
+            "elite": 1
+          }
+        },
+        "rook": {
+          "name": "Rook",
+          "total": 3778,
+          "served": 3228,
+          "servedRate": 0.8544203282159873,
+          "demandMix": {
+            "gear": 560,
+            "rest": 1129,
+            "supplies": 557,
+            "food": 1152,
+            "healing": 380
+          },
+          "tierMix": {
+            "novice": 3778
+          }
+        },
+        "saela": {
+          "name": "Saela Thornmere",
+          "total": 3761,
+          "served": 3238,
+          "servedRate": 0.8609412390321723,
+          "demandMix": {
+            "supplies": 584,
+            "rest": 1099,
+            "food": 1135,
+            "gear": 588,
+            "healing": 355
+          },
+          "tierMix": {
+            "novice": 3760,
+            "veteran": 1
+          }
+        },
+        "sera": {
+          "name": "Sera",
+          "total": 3760,
+          "served": 3237,
+          "servedRate": 0.8609042553191489,
+          "demandMix": {
+            "rest": 1118,
+            "gear": 580,
+            "healing": 356,
+            "food": 1132,
+            "supplies": 574
+          },
+          "tierMix": {
+            "novice": 3759,
+            "veteran": 1
+          }
+        },
+        "shavarra": {
+          "name": "Shavarra Duskwell",
+          "total": 3756,
+          "served": 3207,
+          "servedRate": 0.8538338658146964,
+          "demandMix": {
+            "rest": 1119,
+            "healing": 357,
+            "gear": 550,
+            "food": 1158,
+            "supplies": 572
+          },
+          "tierMix": {
+            "novice": 3755,
+            "veteran": 1
+          }
+        },
+        "silt": {
+          "name": "Silt of Three Roads",
+          "total": 3789,
+          "served": 3273,
+          "servedRate": 0.8638163103721298,
+          "demandMix": {
+            "rest": 1139,
+            "food": 1118,
+            "gear": 548,
+            "healing": 397,
+            "supplies": 587
+          },
+          "tierMix": {
+            "novice": 3788,
+            "legendary": 1
+          }
+        },
+        "syl": {
+          "name": "Syl Nighthollow",
+          "total": 3812,
+          "served": 3282,
+          "servedRate": 0.8609653725078699,
+          "demandMix": {
+            "rest": 1143,
+            "gear": 573,
+            "supplies": 583,
+            "healing": 373,
+            "food": 1140
+          },
+          "tierMix": {
+            "novice": 3811,
+            "legendary": 1
+          }
+        },
+        "tavi": {
+          "name": "Tavi",
+          "total": 3851,
+          "served": 3295,
+          "servedRate": 0.8556219163853545,
+          "demandMix": {
+            "gear": 576,
+            "rest": 1165,
+            "food": 1145,
+            "supplies": 581,
+            "healing": 384
+          },
+          "tierMix": {
+            "novice": 3848,
+            "elite": 1,
+            "veteran": 1,
+            "legendary": 1
+          }
+        },
+        "thane": {
+          "name": "Thane Grudgebell",
+          "total": 3886,
+          "served": 3336,
+          "servedRate": 0.8584662892434379,
+          "demandMix": {
+            "supplies": 599,
+            "food": 1142,
+            "rest": 1171,
+            "gear": 561,
+            "healing": 413
+          },
+          "tierMix": {
+            "novice": 3884,
+            "legendary": 2
+          }
+        },
+        "torv": {
+          "name": "Torv Emberjaw",
+          "total": 3903,
+          "served": 3340,
+          "servedRate": 0.8557519856520626,
+          "demandMix": {
+            "food": 1190,
+            "rest": 1198,
+            "gear": 592,
+            "supplies": 547,
+            "healing": 376
+          },
+          "tierMix": {
+            "veteran": 1,
+            "novice": 3899,
+            "legendary": 1,
+            "elite": 2
+          }
+        },
+        "vaelor": {
+          "name": "Vaelor Brass-Scale",
+          "total": 3926,
+          "served": 3389,
+          "servedRate": 0.8632195618950586,
+          "demandMix": {
+            "gear": 577,
+            "rest": 1219,
+            "healing": 403,
+            "food": 1167,
+            "supplies": 560
+          },
+          "tierMix": {
+            "novice": 3925,
+            "elite": 1
+          }
+        },
+        "vellum": {
+          "name": "Vellum Quince",
+          "total": 3916,
+          "served": 3378,
+          "servedRate": 0.8626149131767109,
+          "demandMix": {
+            "food": 1170,
+            "healing": 385,
+            "gear": 572,
+            "rest": 1224,
+            "supplies": 565
+          },
+          "tierMix": {
+            "novice": 3915,
+            "elite": 1
+          }
+        },
+        "ysabet": {
+          "name": "Ysabet Crowglass",
+          "total": 3902,
+          "served": 3341,
+          "servedRate": 0.8562275756022553,
+          "demandMix": {
+            "rest": 1140,
+            "food": 1164,
+            "supplies": 598,
+            "healing": 410,
+            "gear": 590
+          },
+          "tierMix": {
+            "novice": 3899,
+            "veteran": 3
+          }
+        }
+      }
+    }
+  }
+}
