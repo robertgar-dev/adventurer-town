@@ -32,7 +32,7 @@ import 'package:flutter_test/flutter_test.dart';
 ///          feet_anchor[x,y] index mapping; a transposition must fail.
 ///   [x] 5. torsoArmor uses the mass centroid (x AND y), distinct from the
 ///          bbox-center x used by every other derivable slot (noted exception).
-///   [ ] 6. feet anchor uniform via the resolver across ALL sprites: y≈0.9941,
+///   [x] 6. feet anchor uniform via the resolver across ALL sprites: y≈0.9941,
 ///          x == the sprite's pipeline feet x.
 ///   [ ] 7. bbox_h_frac span endpoints across the full dataset: min == brindle
 ///          (~0.6611), max == borrin (~0.8984) — the FD9 spanning metric.
@@ -244,6 +244,23 @@ void main() {
       expect(head.x, closeTo(0.5, 1e-4)); // bbox center
       expect((torso.x - head.x).abs(), greaterThan(0.04),
           reason: 'torso must use centroid x, distinct from the bbox-center x');
+    });
+  });
+
+  group('FD9 D3 — feetPosture passes through the uniform pipeline anchor', () {
+    test('every sprite: feet y ≈ 0.9941 and feet x == the pipeline feet x', () {
+      for (final g in allGeometries()) {
+        final feet =
+            resolver.resolve(OverlaySlot.feetPosture, g) as DerivedAnchor;
+        // The resolver reuses the existing drift-free pipeline anchor verbatim:
+        // y is the uniform 0.9941 floor; x passes through unchanged (it varies
+        // ~0.4985–0.5005 across the set, so this is a real pass-through check,
+        // not a constant).
+        expect(feet.y, closeTo(0.9941, 1e-3),
+            reason: '${g.name} feet y must be the uniform floor');
+        expect(feet.x, g.feetAnchorX,
+            reason: '${g.name} feet x must pass through the pipeline anchor');
+      }
     });
   });
 }
