@@ -34,7 +34,7 @@ import 'package:flutter_test/flutter_test.dart';
 ///          bbox-center x used by every other derivable slot (noted exception).
 ///   [x] 6. feet anchor uniform via the resolver across ALL sprites: y≈0.9941,
 ///          x == the sprite's pipeline feet x.
-///   [ ] 7. bbox_h_frac span endpoints across the full dataset: min == brindle
+///   [x] 7. bbox_h_frac span endpoints across the full dataset: min == brindle
 ///          (~0.6611), max == borrin (~0.8984) — the FD9 spanning metric.
 ///   [ ] 8. DerivedAnchor value semantics: == and hashCode (equal iff x&y equal).
 ///   [ ] 9. RequiresAnnotation value semantics: all instances equal, stable
@@ -260,6 +260,41 @@ void main() {
             reason: '${g.name} feet y must be the uniform floor');
         expect(feet.x, g.feetAnchorX,
             reason: '${g.name} feet x must pass through the pipeline anchor');
+      }
+    });
+  });
+
+  group('FD9 spanning metric — bbox_h_frac endpoints across the dataset', () {
+    // The content-relative model is validated against the empirical envelope of
+    // bbox_h_frac. FD9 documents the span as ~0.661 (Brindle, shortest content)
+    // to ~0.898 (Borrin, tallest). This test locks BOTH the identity of the
+    // endpoint sprites and the values, so a geometry-baseline edit that shifts
+    // the envelope (e.g. the FD7 re-render) trips here.
+    late List<SpriteGeometry> sprites;
+
+    setUpAll(() => sprites = allGeometries());
+
+    SpriteGeometry minByHeightFrac() => sprites
+        .reduce((a, b) => a.bboxHeightFrac <= b.bboxHeightFrac ? a : b);
+    SpriteGeometry maxByHeightFrac() => sprites
+        .reduce((a, b) => a.bboxHeightFrac >= b.bboxHeightFrac ? a : b);
+
+    test('minimum bbox_h_frac is Brindle at ~0.6611', () {
+      final lo = minByHeightFrac();
+      expect(lo.name, 'brindle');
+      expect(lo.bboxHeightFrac, closeTo(0.6611, 1e-3));
+    });
+
+    test('maximum bbox_h_frac is Borrin at ~0.8984', () {
+      final hi = maxByHeightFrac();
+      expect(hi.name, 'borrin');
+      expect(hi.bboxHeightFrac, closeTo(0.8984, 1e-3));
+    });
+
+    test('every sprite sits within the [Brindle, Borrin] envelope', () {
+      for (final g in sprites) {
+        expect(g.bboxHeightFrac, inInclusiveRange(0.6611 - 1e-3, 0.8984 + 1e-3),
+            reason: '${g.name} bbox_h_frac escaped the documented FD9 span');
       }
     });
   });
