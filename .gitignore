@@ -57,3 +57,8 @@ art_src/
 tools/sprite_pipeline/.venv/
 # Scratch/preview renders from the sprite pipeline (leading-underscore = throwaway)
 tools/sprite_pipeline/_*.png
+
+# Throwaway proof/audit run scratch (raw harnesses + traces; not part of the
+# committed proof reports under docs/). Disposable, kept out of version control.
+tools/fd9_phasec_proof_scratch/
+tools/generativity_audit_scratch/
