@@ -24,7 +24,7 @@ import 'package:flutter_test/flutter_test.dart';
 ///   [x] 1. Borrin max-span exact oracle — boundary partner to Brindle's min.
 ///          bbox_h_frac ≈ 0.8984 (dataset max). Locks the derived anchors at the
 ///          top of the documented span, not just "in frame".
-///   [ ] 2. Monotonic body order: head.y < shoulders.y < pack.y < belt.y <
+///   [x] 2. Monotonic body order: head.y < shoulders.y < pack.y < belt.y <
 ///          feet.y for EVERY sprite — the structural FD9 grammar invariant.
 ///   [ ] 3. SpriteGeometry derived getters (bboxTopFrac / bboxHeightFrac /
 ///          bboxCenterXFrac) on a constructed geometry with known integer math.
@@ -48,6 +48,14 @@ void main() {
     final list = (jsonDecode(file.readAsStringSync()) as List)
         .cast<Map<String, dynamic>>();
     return SpriteGeometry.fromJson(list.firstWhere((s) => s['name'] == name));
+  }
+
+  List<SpriteGeometry> allGeometries() {
+    final file = File('tools/sprite_pipeline/sprite_geometry.json');
+    return (jsonDecode(file.readAsStringSync()) as List)
+        .cast<Map<String, dynamic>>()
+        .map(SpriteGeometry.fromJson)
+        .toList();
   }
 
   group('FD9 D3 — derivable slots compute the rule (hand oracle: Borrin, '
@@ -101,5 +109,34 @@ void main() {
       expect(feet.x, closeTo(0.5, 1e-4));
       expect(feet.y, closeTo(0.9941, 1e-4));
     });
+  });
+
+  group('FD9 D3 — anchors descend the body in grammar order (every sprite)', () {
+    // The bbox-derived y-rules use strictly increasing coefficients
+    // (0 < 0.12 < 0.30 < 0.60) over a positive bbox height, and feet sit at the
+    // pipeline floor (~0.9941). So for ANY real sprite the slots must stack
+    // head → shoulders → pack → belt → feet top-to-bottom. Package C relies on
+    // this ordering for overlay stacking; a sign flip or a swapped coefficient
+    // in the resolver would break it here.
+    //
+    // Torso is intentionally excluded from this chain: it anchors to the mass
+    // centroid (FD9 noted exception), not a bbox fraction, so it carries no
+    // guaranteed position in the coefficient ordering.
+    for (final g in allGeometries()) {
+      test('${g.name}: head.y < shoulders.y < pack.y < belt.y < feet.y', () {
+        final head = resolver.resolve(OverlaySlot.headFace, g) as DerivedAnchor;
+        final shoulders =
+            resolver.resolve(OverlaySlot.shouldersCloak, g) as DerivedAnchor;
+        final pack = resolver.resolve(OverlaySlot.packBack, g) as DerivedAnchor;
+        final belt = resolver.resolve(OverlaySlot.beltHands, g) as DerivedAnchor;
+        final feet =
+            resolver.resolve(OverlaySlot.feetPosture, g) as DerivedAnchor;
+
+        expect(head.y, lessThan(shoulders.y));
+        expect(shoulders.y, lessThan(pack.y));
+        expect(pack.y, lessThan(belt.y));
+        expect(belt.y, lessThan(feet.y));
+      });
+    }
   });
 }
