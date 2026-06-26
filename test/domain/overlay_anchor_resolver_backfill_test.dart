@@ -28,7 +28,7 @@ import 'package:flutter_test/flutter_test.dart';
 ///          feet.y for EVERY sprite — the structural FD9 grammar invariant.
 ///   [x] 3. SpriteGeometry derived getters (bboxTopFrac / bboxHeightFrac /
 ///          bboxCenterXFrac) on a constructed geometry with known integer math.
-///   [ ] 4. SpriteGeometry.fromJson parsing fidelity — bbox_px[l,t,r,b] and
+///   [x] 4. SpriteGeometry.fromJson parsing fidelity — bbox_px[l,t,r,b] and
 ///          feet_anchor[x,y] index mapping; a transposition must fail.
 ///   [ ] 5. torsoArmor uses the mass centroid (x AND y), distinct from the
 ///          bbox-center x used by every other derivable slot (noted exception).
@@ -174,6 +174,48 @@ void main() {
     test('bboxCenterXFrac is the bbox center (0.4), not the frame center', () {
       expect(g.bboxCenterXFrac, closeTo(0.40, 1e-12));
       expect(g.bboxCenterXFrac, isNot(closeTo(0.5, 1e-6)));
+    });
+  });
+
+  group('SpriteGeometry.fromJson — array index mapping fidelity', () {
+    // Every field gets a DISTINCT value so a swapped bbox_px or feet_anchor
+    // index (e.g. right<->bottom, or feet x<->y) cannot pass by coincidence.
+    // bbox_px is [left, top, right, bottom]; feet_anchor is [x, y].
+    final g = SpriteGeometry.fromJson(const {
+      'name': 'parsefix',
+      'img_w': 1280,
+      'img_h': 960,
+      'bbox_px': [11, 22, 33, 44],
+      'centroid_x': 0.111,
+      'centroid_y': 0.222,
+      'feet_anchor': [0.333, 0.444],
+    });
+
+    test('scalar fields map by name', () {
+      expect(g.name, 'parsefix');
+      expect(g.imgW, 1280);
+      expect(g.imgH, 960);
+      expect(g.centroidX, closeTo(0.111, 1e-12));
+      expect(g.centroidY, closeTo(0.222, 1e-12));
+    });
+
+    test('bbox_px maps in [left, top, right, bottom] order', () {
+      expect(g.bboxLeft, 11);
+      expect(g.bboxTop, 22);
+      expect(g.bboxRight, 33);
+      expect(g.bboxBottom, 44);
+    });
+
+    test('feet_anchor maps in [x, y] order', () {
+      expect(g.feetAnchorX, closeTo(0.333, 1e-12));
+      expect(g.feetAnchorY, closeTo(0.444, 1e-12));
+    });
+
+    test('parsed values feed the derived getters', () {
+      // bbox_h_frac = (44 - 22) / 960 = 22/960; top = 22/960.
+      expect(g.bboxTopFrac, closeTo(22 / 960, 1e-12));
+      expect(g.bboxHeightFrac, closeTo(22 / 960, 1e-12));
+      expect(g.bboxCenterXFrac, closeTo((11 + 33) / 2 / 1280, 1e-12));
     });
   });
 }
