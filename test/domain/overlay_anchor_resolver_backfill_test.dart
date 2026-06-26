@@ -36,7 +36,7 @@ import 'package:flutter_test/flutter_test.dart';
 ///          x == the sprite's pipeline feet x.
 ///   [x] 7. bbox_h_frac span endpoints across the full dataset: min == brindle
 ///          (~0.6611), max == borrin (~0.8984) — the FD9 spanning metric.
-///   [ ] 8. DerivedAnchor value semantics: == and hashCode (equal iff x&y equal).
+///   [x] 8. DerivedAnchor value semantics: == and hashCode (equal iff x&y equal).
 ///   [ ] 9. RequiresAnnotation value semantics: all instances equal, stable
 ///          hashCode, never equal to a DerivedAnchor.
 /// ───────────────────────────────────────────────────────────────────────────
@@ -296,6 +296,39 @@ void main() {
         expect(g.bboxHeightFrac, inInclusiveRange(0.6611 - 1e-3, 0.8984 + 1e-3),
             reason: '${g.name} bbox_h_frac escaped the documented FD9 span');
       }
+    });
+  });
+
+  group('DerivedAnchor — value semantics (== / hashCode)', () {
+    test('equal iff both x and y match', () {
+      const a = DerivedAnchor(x: 0.4, y: 0.7);
+      const same = DerivedAnchor(x: 0.4, y: 0.7);
+      const diffX = DerivedAnchor(x: 0.5, y: 0.7);
+      const diffY = DerivedAnchor(x: 0.4, y: 0.8);
+
+      expect(a, same);
+      expect(a, isNot(diffX));
+      expect(a, isNot(diffY));
+    });
+
+    test('hashCode agrees with equality for equal values', () {
+      const a = DerivedAnchor(x: 0.4, y: 0.7);
+      const same = DerivedAnchor(x: 0.4, y: 0.7);
+      expect(a.hashCode, same.hashCode);
+    });
+
+    test('value equality lets anchors dedupe in a Set', () {
+      final set = {
+        const DerivedAnchor(x: 0.4, y: 0.7),
+        const DerivedAnchor(x: 0.4, y: 0.7),
+        const DerivedAnchor(x: 0.4, y: 0.8),
+      };
+      expect(set.length, 2);
+    });
+
+    test('never equal to a RequiresAnnotation', () {
+      expect(const DerivedAnchor(x: 0.4, y: 0.7),
+          isNot(const RequiresAnnotation()));
     });
   });
 }
