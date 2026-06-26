@@ -22,7 +22,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// down this list, never redoing finished work):
 ///
 ///   [x] 1. Borrin max-span exact oracle — boundary partner to Brindle's min.
-///          bbox_h_frac ≈ 0.8984 (dataset max). Locks the derived anchors at the
+///          bbox_h_frac ≈ 0.9004 (dataset max). Locks the derived anchors at the
 ///          top of the documented span, not just "in frame".
 ///   [x] 2. Monotonic body order: head.y < shoulders.y < pack.y < belt.y <
 ///          feet.y for EVERY sprite — the structural FD9 grammar invariant.
@@ -35,7 +35,7 @@ import 'package:flutter_test/flutter_test.dart';
 ///   [x] 6. feet anchor uniform via the resolver across ALL sprites: y≈0.9941,
 ///          x == the sprite's pipeline feet x.
 ///   [x] 7. bbox_h_frac span endpoints across the full dataset: min == brindle
-///          (~0.6611), max == borrin (~0.8984) — the FD9 spanning metric.
+///          (~0.6631), max == borrin (~0.9004) — the FD9 spanning metric.
 ///   [x] 8. DerivedAnchor value semantics: == and hashCode (equal iff x&y equal).
 ///   [x] 9. RequiresAnnotation value semantics: all instances equal, stable
 ///          hashCode, never equal to a DerivedAnchor.
@@ -62,11 +62,11 @@ void main() {
 
   group('FD9 D3 — derivable slots compute the rule (hand oracle: Borrin, '
       'max bbox_h_frac)', () {
-    // Borrin: bbox_px [227,98,797,1018], img 1024² →
-    //   bbox_top_frac    = 98/1024             = 0.0957031
-    //   bbox_h_frac      = (1018-98)/1024       = 920/1024 = 0.8984375  (dataset max)
-    //   bbox_center_xfrac= (227+797)/2/1024     = 512/1024 = 0.5
-    //   centroid         = (0.5467, 0.553)
+    // Borrin (FD7 re-render): bbox_px [226,96,798,1018], img 1024² →
+    //   bbox_top_frac    = 96/1024             = 0.09375
+    //   bbox_h_frac      = (1018-96)/1024       = 922/1024 = 0.9003906  (dataset max)
+    //   bbox_center_xfrac= (226+798)/2/1024     = 512/1024 = 0.5
+    //   centroid         = (0.5463, 0.5514)
     //   feet             = (0.5, 0.9941)
     late DerivedAnchor head, shoulders, pack, belt, torso, feet;
 
@@ -83,28 +83,28 @@ void main() {
 
     test('headFace = bbox_top, x at content-bbox center', () {
       expect(head.x, closeTo(0.5, 1e-6));
-      expect(head.y, closeTo(0.0957031, 1e-6));
+      expect(head.y, closeTo(0.09375, 1e-6));
     });
 
     test('shouldersCloak = bbox_top + 0.12 * bbox_h', () {
-      // 0.0957031 + 0.12 * 0.8984375 = 0.2035156
+      // 0.09375 + 0.12 * 0.9003906 = 0.2017969
       expect(shoulders.x, closeTo(0.5, 1e-6));
-      expect(shoulders.y, closeTo(0.2035156, 1e-6));
+      expect(shoulders.y, closeTo(0.2017969, 1e-6));
     });
 
     test('packBack = bbox_top + 0.30 * bbox_h', () {
-      // 0.0957031 + 0.30 * 0.8984375 = 0.3652344
-      expect(pack.y, closeTo(0.3652344, 1e-6));
+      // 0.09375 + 0.30 * 0.9003906 = 0.3638672
+      expect(pack.y, closeTo(0.3638672, 1e-6));
     });
 
     test('beltHands = bbox_top + 0.60 * bbox_h (belt-center default)', () {
-      // 0.0957031 + 0.60 * 0.8984375 = 0.6347656
-      expect(belt.y, closeTo(0.6347656, 1e-6));
+      // 0.09375 + 0.60 * 0.9003906 = 0.6339844
+      expect(belt.y, closeTo(0.6339844, 1e-6));
     });
 
     test('torsoArmor = mass centroid (x and y)', () {
-      expect(torso.x, closeTo(0.5467, 1e-4));
-      expect(torso.y, closeTo(0.553, 1e-4));
+      expect(torso.x, closeTo(0.5463, 1e-4));
+      expect(torso.y, closeTo(0.5514, 1e-4));
     });
 
     test('feetPosture = existing bottom-center anchor (0.9941)', () {
@@ -234,15 +234,15 @@ void main() {
 
     test('torso x is the centroid, NOT the bbox-center x used by other slots',
         () {
-      // isolde: centroid_x 0.4472 vs bbox center (230+794)/2/1024 = 0.5.
+      // thane: centroid_x 0.4422 vs bbox center 0.5.
       // If torso wrongly reused bboxCenterXFrac (like head/shoulders/pack/belt),
       // these would coincide. They must not.
-      final g = geomFor('isolde');
+      final g = geomFor('thane');
       final torso =
           resolver.resolve(OverlaySlot.torsoArmor, g) as DerivedAnchor;
       final head = resolver.resolve(OverlaySlot.headFace, g) as DerivedAnchor;
 
-      expect(torso.x, closeTo(0.4472, 1e-4));
+      expect(torso.x, closeTo(0.4422, 1e-4));
       expect(head.x, closeTo(0.5, 1e-4)); // bbox center
       expect((torso.x - head.x).abs(), greaterThan(0.04),
           reason: 'torso must use centroid x, distinct from the bbox-center x');
@@ -281,21 +281,21 @@ void main() {
     SpriteGeometry maxByHeightFrac() => sprites
         .reduce((a, b) => a.bboxHeightFrac >= b.bboxHeightFrac ? a : b);
 
-    test('minimum bbox_h_frac is Brindle at ~0.6611', () {
+    test('minimum bbox_h_frac is Brindle at ~0.6631', () {
       final lo = minByHeightFrac();
       expect(lo.name, 'brindle');
-      expect(lo.bboxHeightFrac, closeTo(0.6611, 1e-3));
+      expect(lo.bboxHeightFrac, closeTo(0.6631, 1e-3));
     });
 
-    test('maximum bbox_h_frac is Borrin at ~0.8984', () {
+    test('maximum bbox_h_frac is Borrin at ~0.9004', () {
       final hi = maxByHeightFrac();
       expect(hi.name, 'borrin');
-      expect(hi.bboxHeightFrac, closeTo(0.8984, 1e-3));
+      expect(hi.bboxHeightFrac, closeTo(0.9004, 1e-3));
     });
 
     test('every sprite sits within the [Brindle, Borrin] envelope', () {
       for (final g in sprites) {
-        expect(g.bboxHeightFrac, inInclusiveRange(0.6611 - 1e-3, 0.8984 + 1e-3),
+        expect(g.bboxHeightFrac, inInclusiveRange(0.6631 - 1e-3, 0.9004 + 1e-3),
             reason: '${g.name} bbox_h_frac escaped the documented FD9 span');
       }
     });

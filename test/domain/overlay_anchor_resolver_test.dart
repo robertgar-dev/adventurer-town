@@ -38,8 +38,8 @@ void main() {
   ];
 
   group('FD9 D3 — derivable slots compute the rule (hand oracle: Brindle)', () {
-    // Brindle: bbox_px [231,341,792,1018], img 1024² → top 0.333008,
-    // h 0.661133, center_x 0.499512, centroid (0.5094,0.6352), feet (0.4995,0.9941).
+    // Brindle (FD7 re-render): bbox_px [232,339,792,1018], img 1024² → top
+    // 0.331055, h 0.6631, center_x 0.5, centroid (0.5114,0.6343), feet (0.5,0.9941).
     late DerivedAnchor head, shoulders, pack, belt, torso, feet;
 
     setUp(() {
@@ -54,31 +54,31 @@ void main() {
     });
 
     test('headFace = bbox_top, x at content-bbox center', () {
-      expect(head.x, closeTo(0.499512, 1e-5));
-      expect(head.y, closeTo(0.333008, 1e-5));
+      expect(head.x, closeTo(0.5, 1e-5));
+      expect(head.y, closeTo(0.331055, 1e-5));
     });
 
     test('shouldersCloak = bbox_top + 0.12 * bbox_h', () {
-      expect(shoulders.y, closeTo(0.412344, 1e-5));
-      expect(shoulders.x, closeTo(0.499512, 1e-5));
+      expect(shoulders.y, closeTo(0.410625, 1e-5));
+      expect(shoulders.x, closeTo(0.5, 1e-5));
     });
 
     test('packBack = bbox_top + 0.30 * bbox_h', () {
-      expect(pack.y, closeTo(0.531348, 1e-5));
+      expect(pack.y, closeTo(0.52998, 1e-5));
     });
 
     test('beltHands = bbox_top + 0.60 * bbox_h (belt-center default)', () {
-      expect(belt.y, closeTo(0.729688, 1e-5));
+      expect(belt.y, closeTo(0.728906, 1e-5));
     });
 
     test('torsoArmor = mass centroid (x and y)', () {
-      expect(torso.x, closeTo(0.5094, 1e-4));
-      expect(torso.y, closeTo(0.6352, 1e-4));
+      expect(torso.x, closeTo(0.5114, 1e-4));
+      expect(torso.y, closeTo(0.6343, 1e-4));
     });
 
     test('feetPosture = existing bottom-center anchor (0.9941)', () {
       expect(feet.y, closeTo(0.9941, 1e-4));
-      expect(feet.x, closeTo(0.4995, 1e-4));
+      expect(feet.x, closeTo(0.5, 1e-4));
     });
   });
 
@@ -90,7 +90,7 @@ void main() {
   });
 
   group('Proof span — every derivable slot resolves to a defined anchor', () {
-    // Brindle (min 0.6611), Borrin (max 0.8984), Keebo (non-human), + two mid.
+    // Brindle (min 0.6631), Borrin (max 0.9004), Keebo (non-human), + two mid.
     const span = ['brindle', 'borrin', 'keebo', 'durnik', 'nym'];
     for (final name in span) {
       for (final slot in derivableSlots) {
