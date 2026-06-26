@@ -37,8 +37,10 @@ import 'package:flutter_test/flutter_test.dart';
 ///   [x] 7. bbox_h_frac span endpoints across the full dataset: min == brindle
 ///          (~0.6611), max == borrin (~0.8984) — the FD9 spanning metric.
 ///   [x] 8. DerivedAnchor value semantics: == and hashCode (equal iff x&y equal).
-///   [ ] 9. RequiresAnnotation value semantics: all instances equal, stable
+///   [x] 9. RequiresAnnotation value semantics: all instances equal, stable
 ///          hashCode, never equal to a DerivedAnchor.
+///
+/// PLAN COMPLETE — all nine increments landed; suite green.
 /// ───────────────────────────────────────────────────────────────────────────
 void main() {
   const resolver = OverlayAnchorResolver();
@@ -329,6 +331,33 @@ void main() {
     test('never equal to a RequiresAnnotation', () {
       expect(const DerivedAnchor(x: 0.4, y: 0.7),
           isNot(const RequiresAnnotation()));
+    });
+  });
+
+  group('RequiresAnnotation — value semantics and sole occupancy', () {
+    test('all instances are equal with a stable, shared hashCode', () {
+      const a = RequiresAnnotation();
+      const b = RequiresAnnotation();
+      expect(a, b);
+      expect(a.hashCode, b.hashCode);
+      // The status is a singleton value: a Set of many collapses to one.
+      expect({a, b, const RequiresAnnotation()}.length, 1);
+    });
+
+    test('never equal to a DerivedAnchor', () {
+      expect(const RequiresAnnotation(),
+          isNot(const DerivedAnchor(x: 0.0, y: 0.0)));
+    });
+
+    test('weaponToolEdge is the ONLY slot the resolver leaves un-derived', () {
+      // Ties the sealed RequiresAnnotation outcome to the FD9 D4 decision that
+      // Weapon/Tool-Edge is the single deferred-annotated slot: across the whole
+      // grammar, exactly one slot yields RequiresAnnotation and it is weapon.
+      final g = geomFor('brindle');
+      final annotated = OverlaySlot.values
+          .where((s) => resolver.resolve(s, g) is RequiresAnnotation)
+          .toList();
+      expect(annotated, [OverlaySlot.weaponToolEdge]);
     });
   });
 }
