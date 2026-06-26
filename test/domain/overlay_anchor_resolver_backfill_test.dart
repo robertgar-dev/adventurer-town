@@ -26,7 +26,7 @@ import 'package:flutter_test/flutter_test.dart';
 ///          top of the documented span, not just "in frame".
 ///   [x] 2. Monotonic body order: head.y < shoulders.y < pack.y < belt.y <
 ///          feet.y for EVERY sprite — the structural FD9 grammar invariant.
-///   [ ] 3. SpriteGeometry derived getters (bboxTopFrac / bboxHeightFrac /
+///   [x] 3. SpriteGeometry derived getters (bboxTopFrac / bboxHeightFrac /
 ///          bboxCenterXFrac) on a constructed geometry with known integer math.
 ///   [ ] 4. SpriteGeometry.fromJson parsing fidelity — bbox_px[l,t,r,b] and
 ///          feet_anchor[x,y] index mapping; a transposition must fail.
@@ -138,5 +138,42 @@ void main() {
         expect(belt.y, lessThan(feet.y));
       });
     }
+  });
+
+  group('SpriteGeometry — bbox→frame-fraction getters (constructed geometry)',
+      () {
+    // Non-square frame with distinct img_w (1000) and img_h (2000) so a width/
+    // height transposition in any getter is caught. bbox left/right are NOT
+    // symmetric about the frame, so bboxCenterXFrac must be the BBOX center
+    // (0.4), never the frame center (0.5).
+    //   bbox_top_frac     = 300 / 2000             = 0.15
+    //   bbox_h_frac       = (1900 - 300) / 2000     = 1600/2000 = 0.80
+    //   bbox_center_xfrac = (100 + 700) / 2 / 1000  = 400/1000  = 0.40
+    const g = SpriteGeometry(
+      name: 'constructed',
+      imgW: 1000,
+      imgH: 2000,
+      bboxLeft: 100,
+      bboxTop: 300,
+      bboxRight: 700,
+      bboxBottom: 1900,
+      centroidX: 0.42,
+      centroidY: 0.58,
+      feetAnchorX: 0.5,
+      feetAnchorY: 0.9941,
+    );
+
+    test('bboxTopFrac = bbox_top / img_h', () {
+      expect(g.bboxTopFrac, closeTo(0.15, 1e-12));
+    });
+
+    test('bboxHeightFrac = (bbox_bottom - bbox_top) / img_h', () {
+      expect(g.bboxHeightFrac, closeTo(0.80, 1e-12));
+    });
+
+    test('bboxCenterXFrac is the bbox center (0.4), not the frame center', () {
+      expect(g.bboxCenterXFrac, closeTo(0.40, 1e-12));
+      expect(g.bboxCenterXFrac, isNot(closeTo(0.5, 1e-6)));
+    });
   });
 }
