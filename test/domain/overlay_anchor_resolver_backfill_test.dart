@@ -30,7 +30,7 @@ import 'package:flutter_test/flutter_test.dart';
 ///          bboxCenterXFrac) on a constructed geometry with known integer math.
 ///   [x] 4. SpriteGeometry.fromJson parsing fidelity — bbox_px[l,t,r,b] and
 ///          feet_anchor[x,y] index mapping; a transposition must fail.
-///   [ ] 5. torsoArmor uses the mass centroid (x AND y), distinct from the
+///   [x] 5. torsoArmor uses the mass centroid (x AND y), distinct from the
 ///          bbox-center x used by every other derivable slot (noted exception).
 ///   [ ] 6. feet anchor uniform via the resolver across ALL sprites: y≈0.9941,
 ///          x == the sprite's pipeline feet x.
@@ -216,6 +216,34 @@ void main() {
       expect(g.bboxTopFrac, closeTo(22 / 960, 1e-12));
       expect(g.bboxHeightFrac, closeTo(22 / 960, 1e-12));
       expect(g.bboxCenterXFrac, closeTo((11 + 33) / 2 / 1280, 1e-12));
+    });
+  });
+
+  group('FD9 D3 — torsoArmor anchors to the mass centroid (noted exception)',
+      () {
+    test('torso = (centroid_x, centroid_y) exactly, for every sprite', () {
+      for (final g in allGeometries()) {
+        final torso =
+            resolver.resolve(OverlaySlot.torsoArmor, g) as DerivedAnchor;
+        expect(torso.x, g.centroidX, reason: '${g.name} torso.x == centroid_x');
+        expect(torso.y, g.centroidY, reason: '${g.name} torso.y == centroid_y');
+      }
+    });
+
+    test('torso x is the centroid, NOT the bbox-center x used by other slots',
+        () {
+      // isolde: centroid_x 0.4472 vs bbox center (230+794)/2/1024 = 0.5.
+      // If torso wrongly reused bboxCenterXFrac (like head/shoulders/pack/belt),
+      // these would coincide. They must not.
+      final g = geomFor('isolde');
+      final torso =
+          resolver.resolve(OverlaySlot.torsoArmor, g) as DerivedAnchor;
+      final head = resolver.resolve(OverlaySlot.headFace, g) as DerivedAnchor;
+
+      expect(torso.x, closeTo(0.4472, 1e-4));
+      expect(head.x, closeTo(0.5, 1e-4)); // bbox center
+      expect((torso.x - head.x).abs(), greaterThan(0.04),
+          reason: 'torso must use centroid x, distinct from the bbox-center x');
     });
   });
 }
