@@ -119,8 +119,9 @@ options. Do not reopen them or propose alternatives unless the founder explicitl
 > **Flame** is adopted as the render engine for it. Flutter/Dart remains the app and simulation
 > foundation. The two affected bullets are annotated inline; where this amendment conflicts with
 > the original wording, the amendment governs. Authority: `Spatial_TownView_Founder_Decision_Record_V1`
-> (FD1, FD7) — owed from the founder, not yet delivered to this repo; to be committed to `docs/`
-> when provided.
+> (FD1, FD7) — **delivered 2026-06-28** to `docs/founder/Spatial_TownView_Founder_Decision_Record_V1.md`
+> (verbatim copy; the design repo `AdventurerTown\06_Art_and_Audio\Artifacts\` remains the source of
+> truth). Provenance gap closed; see `docs/Provenance_Report_2026-06-28.md`.
 
 - ~~**Pure Flutter / Dart. No game engine.**~~ — **Amended 2026-06-20 (FD1):** Flutter/Dart remains
   the app and simulation foundation, but a game engine (**Flame**) is now permitted, scoped to the
