@@ -1,3 +1,5 @@
+> ⚠️ SUPERSEDED — measured at `fa677aa` (pre-build). M12 Stage 1 shipped at `c41b22d` (tag `m12-stage1-attachment`); see `M12_Stage1_Status_Correction_V1.md`. The "0/4 / BLOCKED" verdict below is stale.
+
 # M12 Stage 1 — Validation Report
 
 **Working Title:** Adventurer Town

@@ -19,7 +19,7 @@ void main() {
       await _pumpHeader(tester, gold: 10, reputation: 50);
 
       expect(find.byKey(const Key('reputation-destination')), findsOneWidget);
-      expect(find.textContaining('seasoned adventurers'), findsOneWidget);
+      expect(find.textContaining('Reliable Stop'), findsOneWidget);
     });
 
     testWidgets('renders no fill/progress bar (not a spendable wallet)',

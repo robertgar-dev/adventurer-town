@@ -45,16 +45,24 @@ class ReputationDestination {
   final String trajectoryText;
 }
 
-/// Ordered standings above Novice, derived from the approved tier thresholds
-/// (Veteran 100, Elite 400, Legendary 1200). Labels are trust flavor only.
-const List<(int, String)> _reputationStandings = [
-  (100, 'seasoned adventurers'),
-  (400, 'elite adventurers'),
-  (1200, 'legendary champions'),
+/// The single canonical Town Standing source. Reputation is surfaced as the
+/// town's *standing* — a derived, never-spent, never-persisted named tier keyed
+/// to the approved tier thresholds (Veteran 100, Elite 400, Legendary 1200).
+/// Both WP1's header trajectory ([reputationDestinationFor]) and WP3's notable
+/// "standing reached" moment ([_standingMoment]) read from this one list, so the
+/// two surfaces can never diverge. Town voice, not cohort flavor.
+/// Authority: docs/M12/WP1_Reputation_Destination_Arbiter_Record_V2.md (RATIFIED).
+const List<(int, String)> _townStandings = [
+  (100, 'Reliable Stop'),
+  (400, 'Trusted Haven'),
+  (1200, 'Beacon of the Roads'),
 ];
 
+/// Apex caption shown once Reputation has passed the highest standing.
+const String _townStandingApexText = 'Known and trusted across the land';
+
 ReputationDestination reputationDestinationFor(int reputation) {
-  for (final (threshold, label) in _reputationStandings) {
+  for (final (threshold, label) in _townStandings) {
     if (reputation < threshold) {
       final remaining = threshold - reputation;
       return ReputationDestination(
@@ -73,7 +81,7 @@ ReputationDestination reputationDestinationFor(int reputation) {
     reputationToNextStanding: null,
     nextStandingLabel: null,
     isAtHighestStanding: true,
-    trajectoryText: 'Known and trusted across the land',
+    trajectoryText: _townStandingApexText,
   );
 }
 
@@ -128,29 +136,26 @@ List<NotableMomentViewModel> deriveNotableMoments(SimulationState state) {
   return List.unmodifiable(moments.take(3));
 }
 
+/// The notable "standing reached" moment. Consumes the single canonical
+/// [_townStandings] source so its copy can never diverge from WP1's header
+/// trajectory. Returns the highest standing the town's earned trust has reached
+/// (or null below the first threshold). Copy convergence only — same thresholds,
+/// same `notable_standing_{threshold}` ids, no new Event Feed semantics.
 NotableMomentViewModel? _standingMoment(int reputation) {
-  if (reputation >= 1200) {
-    return const NotableMomentViewModel(
-      id: 'notable_standing_1200',
-      description: 'Legends speak of this town — even the greatest champions '
-          'count on it.',
-    );
+  (int, String)? reached;
+  for (final standing in _townStandings) {
+    if (reputation >= standing.$1) {
+      reached = standing;
+    }
   }
-  if (reputation >= 400) {
-    return const NotableMomentViewModel(
-      id: 'notable_standing_400',
-      description: "The town's name carries far — elite adventurers seek it "
-          'out.',
-    );
+  if (reached == null) {
+    return null;
   }
-  if (reputation >= 100) {
-    return const NotableMomentViewModel(
-      id: 'notable_standing_100',
-      description: 'Word has spread — seasoned adventurers now make the town a '
-          'stop on their road.',
-    );
-  }
-  return null;
+  final (threshold, label) = reached;
+  return NotableMomentViewModel(
+    id: 'notable_standing_$threshold',
+    description: 'Travelers now know the town as a $label.',
+  );
 }
 
 Building? _topServedBuilding(Iterable<Building> buildings) {
