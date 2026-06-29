@@ -322,6 +322,7 @@ void main() {
     test('value equality lets anchors dedupe in a Set', () {
       final set = {
         const DerivedAnchor(x: 0.4, y: 0.7),
+        // ignore: equal_elements_in_set — duplicate is the fixture: asserts value-equality dedup
         const DerivedAnchor(x: 0.4, y: 0.7),
         const DerivedAnchor(x: 0.4, y: 0.8),
       };
@@ -341,6 +342,7 @@ void main() {
       expect(a, b);
       expect(a.hashCode, b.hashCode);
       // The status is a singleton value: a Set of many collapses to one.
+      // ignore: equal_elements_in_set — duplicates are the fixture: asserts singleton collapse to one
       expect({a, b, const RequiresAnnotation()}.length, 1);
     });
 
