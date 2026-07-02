@@ -36,7 +36,9 @@ These are not aspirations. They are constraints on what may be built.
    comes from preparedness; concern comes from missed service. Responsibility is for the town,
    never for individual adventurer outcomes.
 
-2. **Adventurers are autonomous customers, not units to command.** They arrive with needs,
+2. **Adventurers are autonomous residents whose growth the town cultivates, not units to
+   command.** *(Amended by FD11, 2026-07-01 — "customers" retired as legacy framing; autonomy
+   unchanged. See `docs/founder/FD11_Stage1_Ratification.md` §4.)* They arrive with needs,
    spend when served, succeed or struggle off-screen, leave, and may return. They are not
    inventory, employees, troops, party members, or puzzle pieces. The emotional contract is
    exact: *the player affects adventurers' lives but does not control them.* This line is the
